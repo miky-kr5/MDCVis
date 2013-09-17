@@ -1,7 +1,7 @@
 /**-----------------------------------------------------------------------------
 ; File:          application.h
 ; Description:   Declaration of the base application class.
-; Authot:        Miguel Angel Astor, sonofgrendel@gmail.com
+; Author:        Miguel Angel Astor, sonofgrendel@gmail.com
 ; Date created:  9/17/2013
 ; Date modified: 9/17/2013
 ;
@@ -39,6 +39,7 @@ class Application : public IEventReceiver{
         scene::ISceneManager *smgr;
         gui::IGUIEnvironment *guienv;
 
+        int lastFPS;
     public:
         // Default constructor.
         Application();

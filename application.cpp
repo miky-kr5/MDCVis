@@ -1,7 +1,7 @@
 /**-----------------------------------------------------------------------------
 ; File:          application.cpp
 ; Description:   Implementation of the base application class.
-; Authot:        Miguel Angel Astor, sonofgrendel@gmail.com
+; Author:        Miguel Angel Astor, sonofgrendel@gmail.com
 ; Date created:  9/17/2013
 ; Date modified: 9/17/2013
 ;
@@ -26,50 +26,142 @@ Application::Application(){
     // Setup the application with the following
     device = irr::createDevice(video::EDT_OPENGL, // OpenGL rendering.
                                core::dimension2d<u32>(800, 600), // 800x600 screen.
-                               16,    // 16 bits per pixel.
-                               false, // No fullscreen.
+                               32,    // 32 bits per pixel.
+                               true,  // Fullscreen.
                                false, // No stencil buffer.
-                               false, // No vertical sync.
+                               true, // No vertical sync.
                                this); // Register this own class as event listener.
+    if(device == NULL) return;
     device->setWindowCaption(L"Museo de Ciencias :: Demostracion 1");
+    device->getCursorControl()->setVisible(false);
 
     // Get pointers to the engine objects to avoid calling the getters at a later time.
     driver = device->getVideoDriver();
     smgr = device->getSceneManager();
     guienv = device->getGUIEnvironment();
+
+    lastFPS = -1;
 }
 
 Application::~Application(){
     // Delete all objects created by the engine.
-    device->drop();
+    if(device != NULL)
+        device->drop();
 }
 
 void Application::buildScene(){
+    scene::IAnimatedMesh* mesh;
+    scene::ISceneNode* node;
+    SKeyMap keyMap[9];
+    scene::ICameraSceneNode* camera;
+    scene::ITriangleSelector* mapSelector;
+    scene::IMetaTriangleSelector* metaSelector;
+    scene::ISceneNodeAnimatorCollisionResponse* collider;
+
     // Add a label to the window.
-    guienv->addStaticText(L"Hello World! This is the Irrlicht OpenGL renderer!",
-                          core::rect<int>(10,10,200,22),
-                          true);
+    if(device != NULL){
+        guienv->addStaticText(L"Hello World! This is the Irrlicht OpenGL renderer!",
+                              core::rect<int>(10,10,200,22),
+                              true);
 
-    // Load a mesh and set it's materials.
-    scene::IAnimatedMesh* mesh = smgr->getMesh("media/sydney.md2");
-    scene::IAnimatedMeshSceneNode* node = smgr->addAnimatedMeshSceneNode( mesh );
-    if(node){
-        node->setMaterialFlag(video::EMF_LIGHTING, false);
-        node->setFrameLoop(0, 310);
-        node->setMaterialTexture( 0, driver->getTexture("media/sydney.bmp") );
+        // Load a mesh and set it's materials.
+        mesh = smgr->getMesh("media/gfx/model/museo.obj");
+        node = smgr->addOctreeSceneNode(mesh->getMesh(0), 0, -1, 1024);
+        if(node){
+            node->setMaterialType(video::EMT_SOLID);
+            node->setMaterialFlag(video::EMF_LIGHTING, true);
+            node->getMaterial(0).SpecularColor.set(0,0,0,0);
+            node->getMaterial(1).SpecularColor.set(0,0,0,0);
+            node->getMaterial(2).SpecularColor.set(0,0,0,0);
+            node->getMaterial(3).SpecularColor.set(0,0,0,0);
+            node->getMaterial(4).SpecularColor.set(0,0,0,0);
+            node->getMaterial(5).SpecularColor.set(0,0,0,0);
+        }
+
+        // Setup some lights.
+        smgr->addLightSceneNode(0, core::vector3df(0, 0, -300), video::SColorf(1.0f, 1.0f, 0.8f, 0.05f), 1600.0f);
+        smgr->addLightSceneNode(0, core::vector3df(0, 700, 0), video::SColorf(1.0f, 1.0f, 1.0f, 0.0f), 400.0f);
+        smgr->addLightSceneNode(0, core::vector3df(0, 300, 300), video::SColorf(1.0f, 1.0f, 1.0f, 0.0f), 400.0f);
+
+        // Setup the keyboard controls.
+        keyMap[0].Action = EKA_MOVE_FORWARD;
+        keyMap[0].KeyCode = KEY_UP;
+        keyMap[1].Action = EKA_MOVE_FORWARD;
+        keyMap[1].KeyCode = KEY_KEY_W;
+
+        keyMap[2].Action = EKA_MOVE_BACKWARD;
+        keyMap[2].KeyCode = KEY_DOWN;
+        keyMap[3].Action = EKA_MOVE_BACKWARD;
+        keyMap[3].KeyCode = KEY_KEY_S;
+
+        keyMap[4].Action = EKA_STRAFE_LEFT;
+        keyMap[4].KeyCode = KEY_LEFT;
+        keyMap[5].Action = EKA_STRAFE_LEFT;
+        keyMap[5].KeyCode = KEY_KEY_A;
+
+        keyMap[6].Action = EKA_STRAFE_RIGHT;
+        keyMap[6].KeyCode = KEY_RIGHT;
+        keyMap[7].Action = EKA_STRAFE_RIGHT;
+        keyMap[7].KeyCode = KEY_KEY_D;
+
+        keyMap[8].Action = EKA_JUMP_UP;
+        keyMap[8].KeyCode = KEY_SPACE;
+
+        // Setup the camera.
+        camera = smgr->addCameraSceneNodeFPS(0, 100.0f, 0.5f, -1, keyMap, 8);
+        camera->setPosition(core::vector3df(0, 700, 0));
+        camera->setTarget(core::vector3df(0, 700, 1));
+        camera->setFarValue(50000.0f);
+
+        // Enable collisions.
+        mapSelector = smgr->createOctreeTriangleSelector(mesh->getMesh(0), node, 128);
+        metaSelector = smgr->createMetaTriangleSelector();
+        metaSelector->addTriangleSelector(mapSelector);
+
+        collider = smgr->createCollisionResponseAnimator(metaSelector,
+                                                         camera,
+                                                         core::vector3df(25,50,25),
+                                                         core::vector3df(0, mesh ? -10.f : 0.0f, 0),
+                                                         core::vector3df(0,45,0), 0.005f);
+        camera->addAnimator(collider);
+        collider->drop();
+
+        // Create sky box
+        driver->setTextureCreationFlag(video::ETCF_CREATE_MIP_MAPS, false);
+        smgr->addSkyBoxSceneNode(driver->getTexture("./media/gfx/skybox/clouds1_up.jpg"),
+                                 driver->getTexture("./media/gfx/skybox/clouds1_down.jpg"),
+                                 driver->getTexture("./media/gfx/skybox/clouds1_north.jpg"),
+                                 driver->getTexture("./media/gfx/skybox/clouds1_south.jpg"),
+                                 driver->getTexture("./media/gfx/skybox/clouds1_east.jpg"),
+                                 driver->getTexture("./media/gfx/skybox/clouds1_west.jpg"));
+        driver->setTextureCreationFlag(video::ETCF_CREATE_MIP_MAPS, true);
     }
-
-    // Add the mesh to the scene.
-    smgr->addCameraSceneNode(0, core::vector3df(0,30,-40), core::vector3df(0,5,0));
 }
 
 void Application::run(){
+    int fps;
+    core::stringw str;
+
     // Render everything until the user requests the application to close itself.
-    while(device->run()){
-        driver->beginScene(true, true, video::SColor(0,200,200,200));
-        smgr->drawAll();
-        guienv->drawAll();
-        driver->endScene();
+    if(device != NULL){
+        while(device->run()){
+            if(device->isWindowActive()){
+                driver->beginScene(true, true, video::SColor(255, 97, 220, 220));
+                smgr->drawAll();
+                driver->endScene();
+
+                fps = driver->getFPS();
+
+                if(lastFPS != fps){
+                    str = L"Museo de Ciencias :: Demostracion 1 [";
+                    str += driver->getName();
+                    str += "] FPS:";
+                    str += fps;
+                    device->setWindowCaption(str.c_str());
+                    lastFPS = fps;
+                }
+            }else device->yield();
+        }
     }
 }
 

@@ -1,7 +1,7 @@
 /**-----------------------------------------------------------------------------
 ; File:          main.cpp
 ; Description:   Application entry point.
-; Authot:        Miguel Angel Astor, sonofgrendel@gmail.com
+; Author:        Miguel Angel Astor, sonofgrendel@gmail.com
 ; Date created:  9/17/2013
 ; Date modified: 9/17/2013
 ;
@@ -32,4 +32,3 @@ int main(int argc, char** argv)
 
     return EXIT_SUCCESS;
 }
-
