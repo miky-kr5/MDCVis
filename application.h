@@ -1,6 +1,6 @@
 /**-----------------------------------------------------------------------------
-; File:          main.cpp
-; Description:   Application entry point.
+; File:          application.h
+; Description:   Declaration of the base application class.
 ; Authot:        Miguel Angel Astor, sonofgrendel@gmail.com
 ; Date created:  9/17/2013
 ; Date modified: 9/17/2013
@@ -20,16 +20,36 @@
 ; You should have received a copy of the GNU General Public License
 ; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ;-----------------------------------------------------------------------------*/
-#include <cstdlib>
-#include "application.h"
+#ifndef APPLICATION_H
+#define APPLICATION_H
 
-int main(int argc, char** argv)
-{
-    Application *app = new Application();
-    app->buildScene();
-    app->run();
-    delete app;
+#include <irrlicht.h>
 
-    return EXIT_SUCCESS;
-}
+using namespace irr;
 
+/**
+* The core class for the program.
+* Implements the main loop and the different scene builders.
+*/
+class Application : public IEventReceiver{
+    private:
+        // Irrlicht engine objects.
+        IrrlichtDevice *device;
+        video::IVideoDriver *driver;
+        scene::ISceneManager *smgr;
+        gui::IGUIEnvironment *guienv;
+
+    public:
+        // Default constructor.
+        Application();
+        // Default destructor.
+        ~Application();
+        // Main loop.
+        void run();
+        // Basic scene builder.
+        void buildScene();
+        // Event handler.
+        bool OnEvent(const SEvent& event);
+};
+
+#endif // APPLICATION_H

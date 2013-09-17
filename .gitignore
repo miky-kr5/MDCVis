@@ -18,10 +18,6 @@ obj/
 *.la
 *.a
 
-# Code::Blocks files
-*.cbp
-*.layout
-
 # Others
 *.d
 *.depend
