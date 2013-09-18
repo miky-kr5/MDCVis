@@ -23,9 +23,14 @@
 #include "application.h"
 
 Application::Application(){
-    // Setup the application with the following
+    core::dimension2d<u32> deskres;
+    // Obtain the screen resolution.
+    device = createDevice(video::EDT_NULL);
+    deskres = device->getVideoModeList()->getDesktopResolution();
+    device -> drop();
+    // Setup the application with the following parameters.
     device = irr::createDevice(video::EDT_OPENGL, // OpenGL rendering.
-                               core::dimension2d<u32>(800, 600), // 800x600 screen.
+                               deskres, // 800x600 screen.
                                32,    // 32 bits per pixel.
                                true,  // Fullscreen.
                                false, // No stencil buffer.
@@ -54,6 +59,7 @@ void Application::buildScene(){
     scene::ISceneNode* node;
     SKeyMap keyMap[9];
     scene::ICameraSceneNode* camera;
+    core::list<scene::ISceneNodeAnimator*> camAnimators;
     scene::ITriangleSelector* mapSelector;
     scene::IMetaTriangleSelector* metaSelector;
     scene::ISceneNodeAnimatorCollisionResponse* collider;
@@ -112,6 +118,15 @@ void Application::buildScene(){
         camera->setPosition(core::vector3df(0, 700, 0));
         camera->setTarget(core::vector3df(0, 700, 1));
         camera->setFarValue(50000.0f);
+
+        camAnimators = camera->getAnimators();
+        core::list<scene::ISceneNodeAnimator*>::ConstIterator i = camAnimators.begin();
+        for(; i != camAnimators.end(); i++){
+            scene::ISceneNodeAnimator *animator = *i;
+            if(animator->getType() == scene::ESNAT_CAMERA_FPS){
+                (static_cast<scene::ISceneNodeAnimatorCameraFPS*>(animator))->setVerticalMovement(false);
+            }
+        }
 
         // Enable collisions.
         mapSelector = smgr->createOctreeTriangleSelector(mesh->getMesh(0), node, 128);
