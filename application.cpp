@@ -71,23 +71,17 @@ void Application::buildScene(){
                               true);
 
         // Load a mesh and set it's materials.
-        mesh = smgr->getMesh("media/gfx/model/museo.obj");
+        mesh = smgr->getMesh("media/gfx/model/museo_demo.obj");
         node = smgr->addOctreeSceneNode(mesh->getMesh(0), 0, -1, 1024);
         if(node){
             node->setMaterialType(video::EMT_SOLID);
-            node->setMaterialFlag(video::EMF_LIGHTING, true);
-            node->getMaterial(0).SpecularColor.set(0,0,0,0);
-            node->getMaterial(1).SpecularColor.set(0,0,0,0);
-            node->getMaterial(2).SpecularColor.set(0,0,0,0);
-            node->getMaterial(3).SpecularColor.set(0,0,0,0);
-            node->getMaterial(4).SpecularColor.set(0,0,0,0);
-            node->getMaterial(5).SpecularColor.set(0,0,0,0);
+            node->setMaterialFlag(video::EMF_LIGHTING, false);
         }
 
         // Setup some lights.
-        smgr->addLightSceneNode(0, core::vector3df(0, 0, -300), video::SColorf(1.0f, 1.0f, 0.8f, 0.05f), 1600.0f);
+        /*smgr->addLightSceneNode(0, core::vector3df(0, 0, -300), video::SColorf(1.0f, 1.0f, 0.8f, 0.05f), 1600.0f);
         smgr->addLightSceneNode(0, core::vector3df(0, 700, 0), video::SColorf(1.0f, 1.0f, 1.0f, 0.0f), 400.0f);
-        smgr->addLightSceneNode(0, core::vector3df(0, 300, 300), video::SColorf(1.0f, 1.0f, 1.0f, 0.0f), 400.0f);
+        smgr->addLightSceneNode(0, core::vector3df(0, 300, 300), video::SColorf(1.0f, 1.0f, 1.0f, 0.0f), 400.0f);*/
 
         // Setup the keyboard controls.
         keyMap[0].Action = EKA_MOVE_FORWARD;
