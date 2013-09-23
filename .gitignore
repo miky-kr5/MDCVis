@@ -21,4 +21,5 @@ obj/
 # Others
 *.d
 *.depend
+*.layout
 *~
