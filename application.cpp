@@ -137,12 +137,12 @@ void Application::buildScene(){
 
         // Create sky box
         driver->setTextureCreationFlag(video::ETCF_CREATE_MIP_MAPS, false);
-        smgr->addSkyBoxSceneNode(driver->getTexture("./media/gfx/skybox/clouds1_up.jpg"),
-                                 driver->getTexture("./media/gfx/skybox/clouds1_down.jpg"),
-                                 driver->getTexture("./media/gfx/skybox/clouds1_north.jpg"),
-                                 driver->getTexture("./media/gfx/skybox/clouds1_south.jpg"),
-                                 driver->getTexture("./media/gfx/skybox/clouds1_east.jpg"),
-                                 driver->getTexture("./media/gfx/skybox/clouds1_west.jpg"));
+        smgr->addSkyBoxSceneNode(driver->getTexture("./media/gfx/skybox/blue_sky.jpg"),
+                                 driver->getTexture("./media/gfx/skybox/blue_sky.jpg"),
+                                 driver->getTexture("./media/gfx/skybox/blue_sky.jpg"),
+                                 driver->getTexture("./media/gfx/skybox/blue_sky.jpg"),
+                                 driver->getTexture("./media/gfx/skybox/blue_sky.jpg"),
+                                 driver->getTexture("./media/gfx/skybox/blue_sky.jpg"));
         driver->setTextureCreationFlag(video::ETCF_CREATE_MIP_MAPS, true);
     }
 }
