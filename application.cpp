@@ -30,9 +30,9 @@ Application::Application(){
     device -> drop();
     // Setup the application with the following parameters.
     device = irr::createDevice(video::EDT_OPENGL, // OpenGL rendering.
-                               deskres, // 800x600 screen.
+                               core::dimension2d<u32>(1024, 768), // 800x600 screen.
                                32,    // 32 bits per pixel.
-                               true,  // Fullscreen.
+                               false,  // Fullscreen.
                                false, // No stencil buffer.
                                true, // No vertical sync.
                                this); // Register this own class as event listener.
@@ -71,17 +71,17 @@ void Application::buildScene(){
                               true);
 
         // Load a mesh and set it's materials.
-        mesh = smgr->getMesh("media/gfx/model/museo_demo.obj");
+        mesh = smgr->getMesh("media/gfx/TestModel1/museo.obj");
         node = smgr->addOctreeSceneNode(mesh->getMesh(0), 0, -1, 1024);
         if(node){
             node->setMaterialType(video::EMT_SOLID);
-            node->setMaterialFlag(video::EMF_LIGHTING, false);
+            node->setMaterialFlag(video::EMF_LIGHTING, true);
         }
 
         // Setup some lights.
-        /*smgr->addLightSceneNode(0, core::vector3df(0, 0, -300), video::SColorf(1.0f, 1.0f, 0.8f, 0.05f), 1600.0f);
+        smgr->addLightSceneNode(0, core::vector3df(0, 0, -300), video::SColorf(1.0f, 1.0f, 0.8f, 0.05f), 1600.0f);
         smgr->addLightSceneNode(0, core::vector3df(0, 700, 0), video::SColorf(1.0f, 1.0f, 1.0f, 0.0f), 400.0f);
-        smgr->addLightSceneNode(0, core::vector3df(0, 300, 300), video::SColorf(1.0f, 1.0f, 1.0f, 0.0f), 400.0f);*/
+        smgr->addLightSceneNode(0, core::vector3df(0, 300, 300), video::SColorf(1.0f, 1.0f, 1.0f, 0.0f), 400.0f);
 
         // Setup the keyboard controls.
         keyMap[0].Action = EKA_MOVE_FORWARD;
