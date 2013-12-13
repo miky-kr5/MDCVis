@@ -1,4 +1,4 @@
-/**-----------------------------------------------------------------------------
+/*------------------------------------------------------------------------------
 ; File:          main.cpp
 ; Description:   Application entry point.
 ; Author:        Miguel Angel Astor, sonofgrendel@gmail.com
@@ -21,10 +21,9 @@
 ; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ;-----------------------------------------------------------------------------*/
 #include <cstdlib>
-#include "application.h"
+#include "Application.h"
 
-int main(int argc, char** argv)
-{
+int main( int argc, char** argv ){
     Application *app = new Application();
     app->buildScene();
     app->run();
