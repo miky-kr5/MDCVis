@@ -1,4 +1,4 @@
-/**-----------------------------------------------------------------------------
+/*------------------------------------------------------------------------------
 ; File:          application.h
 ; Description:   Declaration of the base application class.
 ; Author:        Miguel Angel Astor, sonofgrendel@gmail.com
@@ -27,30 +27,26 @@
 
 using namespace irr;
 
-/**
-* The core class for the program.
-* Implements the main loop and the different scene builders.
-*/
+/*------------------------------------------------------------------------------
+; The core class for the program.
+; Implements the main loop and the different scene builders.
+;-----------------------------------------------------------------------------*/
 class Application : public IEventReceiver{
+    public:
+        Application();                        // Default constructor.
+        ~Application();                       // Default destructor.
+        void run();                           // Main loop.
+        void buildScene();                    // Basic scene builder.
+        bool OnEvent( const SEvent& event );  // Event handler.
+
     private:
         // Irrlicht engine objects.
-        IrrlichtDevice *device;
-        video::IVideoDriver *driver;
-        scene::ISceneManager *smgr;
-        gui::IGUIEnvironment *guienv;
+        IrrlichtDevice         * device;
+        video::IVideoDriver    * driver;
+        scene::ISceneManager   * smgr;
+        gui::IGUIEnvironment   * guienv;
 
-        int lastFPS;
-    public:
-        // Default constructor.
-        Application();
-        // Default destructor.
-        ~Application();
-        // Main loop.
-        void run();
-        // Basic scene builder.
-        void buildScene();
-        // Event handler.
-        bool OnEvent(const SEvent& event);
+        int                      lastFPS;
 };
 
 #endif // APPLICATION_H
