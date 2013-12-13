@@ -3,9 +3,9 @@
 ; Description:   Implementation of the base application class.
 ; Author:        Miguel Angel Astor, sonofgrendel@gmail.com
 ; Date created:  9/17/2013
-; Date modified: 9/17/2013
+; Date modified: 12/13/2013
 ;
-; Copyright (C) 20013 Fundacion Museos Nacionales
+; Copyright (C) 2013 Fundacion Museos Nacionales
 ;
 ; This program is free software: you can redistribute it and/or modify
 ; it under the terms of the GNU General Public License as published by
