@@ -20,6 +20,8 @@
 ; You should have received a copy of the GNU General Public License
 ; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ;-----------------------------------------------------------------------------*/
+#include <cstdlib>
+
 #include "Application.h"
 
 /*------------------------------------------------------------------------------
@@ -38,7 +40,7 @@ Application::Application(){
     device = irr::createDevice( video::EDT_OPENGL,                     // OpenGL rendering.
                                 core::dimension2d<u32>( 1024, 768 ),   // Screen size.
                                 32,                                    // 32 bits per pixel.
-                                false,                                 // Fullscreen status.
+                                true,                                 // Fullscreen status.
                                 false,                                 // Stencil buffer.
                                 true,                                  // V-sync status.
                                 this );                                // Register this own class as its event listener.
@@ -75,8 +77,8 @@ Application::~Application(){
 ; and some controls.
 ;-----------------------------------------------------------------------------*/
 void Application::buildScene(){
-    scene::IAnimatedMesh*                          mesh;
-    scene::ISceneNode*                             node;
+    scene::IAnimatedMesh**                          meshes;
+    scene::ISceneNode**                             nodes;
     SKeyMap                                        keyMap[9];
     scene::ICameraSceneNode*                       camera;
     core::list<scene::ISceneNodeAnimator*>         camAnimators;
@@ -84,20 +86,96 @@ void Application::buildScene(){
     scene::IMetaTriangleSelector*                  metaSelector;
     scene::ISceneNodeAnimatorCollisionResponse*    collider;
 
+    meshes = (scene::IAnimatedMesh**)malloc( 9 * sizeof(scene::IAnimatedMesh*) );
+    nodes = (scene::ISceneNode**)malloc( 9 * sizeof(scene::ISceneNode*) );
 
     if( device != NULL ){
         // Load a mesh and set it's materials.
-        mesh = smgr->getMesh( "media/gfx/TestModel1/museo.obj" );
-        node = smgr->addOctreeSceneNode( mesh->getMesh( 0 ), 0, -1, 1024 );
-        if( node ){
-            node->setMaterialType( video::EMT_SOLID );
-            node->setMaterialFlag( video::EMF_LIGHTING, true );
+        meshes[0] = smgr->getMesh( "media/gfx/TestModel1/partes/balcones.obj" );
+        nodes[0] = smgr->addOctreeSceneNode( meshes[0]->getMesh( 0 ), 0, -1, 1024 );
+        if( nodes[0] ){
+            nodes[0]->setMaterialType( video::EMT_SOLID );
+            nodes[0]->setMaterialFlag( video::EMF_LIGHTING, true );
+            nodes[0]->setMaterialFlag( video::EMF_NORMALIZE_NORMALS, true );
+            //node->setScale( core::vector3df( 186, 186, 186 ) );
+        }
+
+        meshes[1] = smgr->getMesh( "media/gfx/TestModel1/partes/columnas.obj" );
+        nodes[1] = smgr->addOctreeSceneNode( meshes[1]->getMesh( 0 ), 0, -1, 1024 );
+        if( nodes[1] ){
+            nodes[1]->setMaterialType( video::EMT_SOLID );
+            nodes[1]->setMaterialFlag( video::EMF_LIGHTING, true );
+            nodes[1]->setMaterialFlag( video::EMF_NORMALIZE_NORMALS, true );
+            //node->setScale( core::vector3df( 186, 186, 186 ) );
+        }
+
+        meshes[2] = smgr->getMesh( "media/gfx/TestModel1/partes/escaleras.obj" );
+        nodes[2] = smgr->addOctreeSceneNode( meshes[2]->getMesh( 0 ), 0, -1, 1024 );
+        if( nodes[2] ){
+            nodes[2]->setMaterialType( video::EMT_SOLID );
+            nodes[2]->setMaterialFlag( video::EMF_LIGHTING, true );
+            nodes[2]->setMaterialFlag( video::EMF_NORMALIZE_NORMALS, true );
+            //node->setScale( core::vector3df( 186, 186, 186 ) );
+        }
+
+        meshes[3] = smgr->getMesh( "media/gfx/TestModel1/partes/marquesinas1.obj" );
+        nodes[3] = smgr->addOctreeSceneNode( meshes[3]->getMesh( 0 ), 0, -1, 1024 );
+        if( nodes[3] ){
+            nodes[3]->setMaterialType( video::EMT_SOLID );
+            nodes[3]->setMaterialFlag( video::EMF_LIGHTING, true );
+            nodes[3]->setMaterialFlag( video::EMF_NORMALIZE_NORMALS, true );
+            //node->setScale( core::vector3df( 186, 186, 186 ) );
+        }
+
+        meshes[4] = smgr->getMesh( "media/gfx/TestModel1/partes/marquesinas2.obj" );
+        nodes[4] = smgr->addOctreeSceneNode( meshes[4]->getMesh( 0 ), 0, -1, 1024 );
+        if( nodes[4] ){
+            nodes[4]->setMaterialType( video::EMT_SOLID );
+            nodes[4]->setMaterialFlag( video::EMF_LIGHTING, true );
+            nodes[4]->setMaterialFlag( video::EMF_NORMALIZE_NORMALS, true );
+            //node->setScale( core::vector3df( 186, 186, 186 ) );
+        }
+
+        meshes[5] = smgr->getMesh( "media/gfx/TestModel1/partes/paredes.obj" );
+        nodes[5] = smgr->addOctreeSceneNode( meshes[5]->getMesh( 0 ), 0, -1, 1024 );
+        if( nodes[5] ){
+            nodes[5]->setMaterialType( video::EMT_SOLID );
+            nodes[5]->setMaterialFlag( video::EMF_LIGHTING, true );
+            nodes[5]->setMaterialFlag( video::EMF_NORMALIZE_NORMALS, true );
+            //node->setScale( core::vector3df( 186, 186, 186 ) );
+        }
+
+        meshes[6] = smgr->getMesh( "media/gfx/TestModel1/partes/reja.obj" );
+        nodes[6] = smgr->addOctreeSceneNode( meshes[6]->getMesh( 0 ), 0, -1, 1024 );
+        if( nodes[6] ){
+            nodes[6]->setMaterialType( video::EMT_SOLID );
+            nodes[6]->setMaterialFlag( video::EMF_LIGHTING, true );
+            nodes[6]->setMaterialFlag( video::EMF_NORMALIZE_NORMALS, true );
+            //node->setScale( core::vector3df( 186, 186, 186 ) );
+        }
+
+        meshes[7] = smgr->getMesh( "media/gfx/TestModel1/partes/suelo.obj" );
+        nodes[7] = smgr->addOctreeSceneNode( meshes[7]->getMesh( 0 ), 0, -1, 1024 );
+        if( nodes[7] ){
+            nodes[7]->setMaterialType( video::EMT_SOLID );
+            nodes[7]->setMaterialFlag( video::EMF_LIGHTING, true );
+            nodes[7]->setMaterialFlag( video::EMF_NORMALIZE_NORMALS, true );
+            //node->setScale( core::vector3df( 186, 186, 186 ) );
+        }
+
+        meshes[8] = smgr->getMesh( "media/gfx/TestModel1/partes/techo.obj" );
+        nodes[8] = smgr->addOctreeSceneNode( meshes[8]->getMesh( 0 ), 0, -1, 1024 );
+        if( nodes[8] ){
+            nodes[8]->setMaterialType( video::EMT_SOLID );
+            nodes[8]->setMaterialFlag( video::EMF_LIGHTING, true );
+            nodes[8]->setMaterialFlag( video::EMF_NORMALIZE_NORMALS, true );
+            //node->setScale( core::vector3df( 186, 186, 186 ) );
         }
 
         // Setup some lights.
-        smgr->addLightSceneNode( 0, core::vector3df( 0, 0, -300 ), video::SColorf( 1.0f, 1.0f, 0.8f, 0.05f ), 1600.0f );
+        //smgr->addLightSceneNode( 0, core::vector3df( 0, 0, -300 ), video::SColorf( 1.0f, 1.0f, 0.8f, 0.05f ), 1600.0f );
         smgr->addLightSceneNode( 0, core::vector3df( 0, 700, 0 ), video::SColorf( 1.0f, 1.0f, 1.0f, 0.0f ), 400.0f );
-        smgr->addLightSceneNode( 0, core::vector3df( 0, 300, 300 ), video::SColorf( 1.0f, 1.0f, 1.0f, 0.0f ), 400.0f );
+        //smgr->addLightSceneNode( 0, core::vector3df( 0, 300, 300 ), video::SColorf( 1.0f, 1.0f, 1.0f, 0.0f ), 400.0f );
 
         // Setup the keyboard controls.
         keyMap[0].Action = EKA_MOVE_FORWARD;
@@ -139,14 +217,16 @@ void Application::buildScene(){
         }
 
         // Enable collisions.
-        mapSelector = smgr->createOctreeTriangleSelector( mesh->getMesh(0), node, 128 );
         metaSelector = smgr->createMetaTriangleSelector();
-        metaSelector->addTriangleSelector( mapSelector );
+        for(int i = 0; i < 9; i++){
+            mapSelector = smgr->createOctreeTriangleSelector( meshes[i]->getMesh(0), nodes[i], 128 );
+            metaSelector->addTriangleSelector( mapSelector );
+        }
 
         collider = smgr->createCollisionResponseAnimator( metaSelector,
                                                           camera,
                                                           core::vector3df( 25, 50, 25 ),
-                                                          core::vector3df( 0, mesh ? -10.f : 0.0f, 0 ),
+                                                          core::vector3df( 0, -10.f, 0 ),
                                                           core::vector3df( 0, 45, 0 ),
                                                           0.005f );
         camera->addAnimator( collider );
@@ -154,12 +234,12 @@ void Application::buildScene(){
 
         // Create sky box
         driver->setTextureCreationFlag( video::ETCF_CREATE_MIP_MAPS, false );
-        smgr->addSkyBoxSceneNode( driver->getTexture( "./media/gfx/skybox/blue_sky.jpg" ),
-                                  driver->getTexture( "./media/gfx/skybox/blue_sky.jpg" ),
-                                  driver->getTexture( "./media/gfx/skybox/blue_sky.jpg" ),
-                                  driver->getTexture( "./media/gfx/skybox/blue_sky.jpg" ),
-                                  driver->getTexture( "./media/gfx/skybox/blue_sky.jpg" ),
-                                  driver->getTexture( "./media/gfx/skybox/blue_sky.jpg" ) );
+        smgr->addSkyBoxSceneNode( driver->getTexture( "./media/gfx/skybox/top.png" ),
+                                  driver->getTexture( "./media/gfx/skybox/bottom.png" ),
+                                  driver->getTexture( "./media/gfx/skybox/sides.png" ),
+                                  driver->getTexture( "./media/gfx/skybox/sides.png" ),
+                                  driver->getTexture( "./media/gfx/skybox/sides.png" ),
+                                  driver->getTexture( "./media/gfx/skybox/sides.png" ) );
         driver->setTextureCreationFlag( video::ETCF_CREATE_MIP_MAPS, true );
     }
 }
