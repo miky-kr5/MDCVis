@@ -45,6 +45,7 @@ class Application : public IEventReceiver{
         video::IVideoDriver    * driver;
         scene::ISceneManager   * smgr;
         gui::IGUIEnvironment   * guienv;
+        scene::ICameraSceneNode* camera;
 
         int                      lastFPS;
 };
