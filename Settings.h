@@ -1,9 +1,8 @@
 /*------------------------------------------------------------------------------
 ; File:          Settings.h
-; Description:   Declaration of the application settigns class.
+; Description:   Declaration of the application settings class.
 ; Author:        Miguel Angel Astor, sonofgrendel@gmail.com
 ; Date created:  12/02/2014
-; Date modified: 12/02/2014
 ;
 ; Copyright (C) 2014 Fundacion Museos Nacionales
 ;
@@ -37,6 +36,7 @@ class mdcSettings{
 		static   mdcSettings *           getInstance();
 		static   void                    freeInstance();
 		void                             saveSettings();
+		bool                             settingsChanged();
 
 		/* Getters*/
 		bool                             isFullScreen();
@@ -61,6 +61,7 @@ class mdcSettings{
 
 		string                           settingsPath;
 		bool                             canUseSettings;
+		bool                             changed;
 		irr::IrrlichtDevice *            nullDevice;
 
 		/* Video Settings */

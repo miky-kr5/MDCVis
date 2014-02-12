@@ -1,9 +1,8 @@
 /*------------------------------------------------------------------------------
-; File:          application.h
+; File:          Application.h
 ; Description:   Declaration of the base application class.
 ; Author:        Miguel Angel Astor, sonofgrendel@gmail.com
 ; Date created:  9/17/2013
-; Date modified: 12/13/2013
 ;
 ; Copyright (C) 2013 Fundacion Museos Nacionales
 ;
@@ -20,6 +19,7 @@
 ; You should have received a copy of the GNU General Public License
 ; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ;-----------------------------------------------------------------------------*/
+
 #ifndef APPLICATION_H
 #define APPLICATION_H
 

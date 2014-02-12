@@ -1,3 +1,25 @@
+/*------------------------------------------------------------------------------
+; File:          Settings.cpp
+; Description:   Implementation of the application settings class.
+; Author:        Miguel Angel Astor, sonofgrendel@gmail.com
+; Date created:  12/02/2014
+;
+; Copyright (C) 2014 Fundacion Museos Nacionales
+;
+; This program is free software: you can redistribute it and/or modify
+; it under the terms of the GNU General Public License as published by
+; the Free Software Foundation, either version 3 of the License, or
+; (at your option) any later version.
+;
+; This program is distributed in the hope that it will be useful,
+; but WITHOUT ANY WARRANTY; without even the implied warranty of
+; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+; GNU General Public License for more details.
+;
+; You should have received a copy of the GNU General Public License
+; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+;-----------------------------------------------------------------------------*/
+
 #include <cstdlib>
 #include <cassert>
 #include <cstring>
@@ -58,7 +80,7 @@ void mdcSettings::freeInstance() {
 	}
 }
 
-mdcSettings::mdcSettings(): refs( 0 ) {
+mdcSettings::mdcSettings(): refs( 0 ), changed(false) {
 	screenDimensions = new core::dimension2d<u32>();
 	nullDevice = irr::createDevice(irr::video::EDT_NULL);
 
@@ -129,7 +151,7 @@ void mdcSettings::loadSettingsFile() {
 	// Controls tags
 	const stringw forwardName        ( L"forward" );
 	const stringw backwardName       ( L"backward" );
-	const stringw strafeRightName    ( L"stafe_r" );
+	const stringw strafeRightName    ( L"strafe_r" );
 	const stringw strafeLeftName     ( L"strafe_l" );
 	// Audio tags.
 	const stringw volumeName         ( L"volume" );
@@ -221,18 +243,25 @@ void mdcSettings::loadSettingsFile() {
         						screenDimensions->Height = core::strtol10( & ( s.c_str()[i] ) );
 							}
 						}
+
+					} else if ( currentSection.equals_ignore_case( controlsTag )
+									&& settingTag.equals_ignore_case( xml->getNodeName() ) ) {
+
+					} else if ( currentSection.equals_ignore_case( audioTag )
+									&& settingTag.equals_ignore_case( xml->getNodeName() ) ) {
 					}
 				}
 				break;
 
                 case irr::io::EXN_ELEMENT_END:
                     currentSection=L"";
-                break;
+					break;
 
                 default:
                 	break;
             }
         }
+
         xml->drop();
 	}
 }
@@ -318,6 +347,10 @@ bool mdcSettings::settingsFileExists() {
 }
 
 /* Getters */
+bool mdcSettings::settingsChanged(){
+	return changed;
+}
+
 bool mdcSettings::isFullScreen() {
 	return fullScreen;
 }
@@ -348,21 +381,26 @@ const core::dimension2d<u32> * mdcSettings::getScreenDimensions() {
 
 /* Setters */
 void mdcSettings::setFullScreen( bool isFullScreen) {
+	changed = true;
 	fullScreen = isFullScreen;
 }
 
 void mdcSettings::setVSyncEnabled( bool isVSyncEnabled ) {
+	changed = true;
 	vSync = isVSyncEnabled;
 }
 
 void mdcSettings::setAntialiasingFactor( antialiasing_t factor ) {
+	changed = true;
 	antialiasing = factor;
 }
 
 void mdcSettings::setVideoDriverType( video::E_DRIVER_TYPE newDriverType ) {
+	changed = true;
 	driver = newDriverType;
 }
 
 void mdcSettings::setScreenDimensions( const core::dimension2d<u32> * newDimensions ) {
+	changed = true;
 	screenDimensions = const_cast< core::dimension2d<u32> * >( newDimensions );
 }

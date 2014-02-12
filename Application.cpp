@@ -1,9 +1,8 @@
 /*------------------------------------------------------------------------------
-; File:          application.cpp
+; File:          Application.cpp
 ; Description:   Implementation of the base application class.
 ; Author:        Miguel Angel Astor, sonofgrendel@gmail.com
 ; Date created:  9/17/2013
-; Date modified: 12/13/2013
 ;
 ; Copyright (C) 2013 Fundacion Museos Nacionales
 ;
@@ -20,6 +19,7 @@
 ; You should have received a copy of the GNU General Public License
 ; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ;-----------------------------------------------------------------------------*/
+
 #include <cstdlib>
 
 #include "Application.h"
@@ -68,6 +68,9 @@ mdcApplication::~mdcApplication(){
 	// Delete all objects created by the engine.
 	if(device != NULL)
 		device->drop();
+
+	if ( settings->settingsChanged() )
+		settings->saveSettings();
 
 	settings->freeInstance();
 }

@@ -59,6 +59,8 @@
 		</Compiler>
 		<Unit filename="Application.cpp" />
 		<Unit filename="Application.h" />
+		<Unit filename="Settings.cpp" />
+		<Unit filename="Settings.h" />
 		<Unit filename="main.cpp" />
 		<Extensions>
 			<code_completion />

@@ -115,7 +115,6 @@ Every file must include the follwing header text at the beggining:
     ; Description:   <short one line description of the contents of the file.
     ; Author:        <name of author>, <email>@<some server>
     ; Date created:  <date the file was created in mm/dd/yyyy format>
-    ; Date modified: <date of last modification in mm/dd/yyyy format>
     ;
     ; Copyright (C) <Year of file creation> Fundacion Museos Nacionales
     ;
