@@ -23,11 +23,11 @@
 #include <cstdlib>
 #include "Application.h"
 
-int main( int argc, char** argv ){
-    Application *app = new Application();
-    app->buildScene();
-    app->run();
-    delete app;
+int main( int argc, char** argv ) {
+	mdcApplication *app = new mdcApplication();
+	app->buildScene();
+	app->run();
+	delete app;
 
-    return EXIT_SUCCESS;
+	return EXIT_SUCCESS;
 }

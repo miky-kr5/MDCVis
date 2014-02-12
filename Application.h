@@ -25,29 +25,33 @@
 
 #include <irrlicht.h>
 
+#include "Settings.h"
+
 using namespace irr;
 
 /*------------------------------------------------------------------------------
 ; The core class for the program.
 ; Implements the main loop and the different scene builders.
 ;-----------------------------------------------------------------------------*/
-class Application : public IEventReceiver{
-    public:
-        Application();                        // Default constructor.
-        ~Application();                       // Default destructor.
-        void run();                           // Main loop.
-        void buildScene();                    // Basic scene builder.
-        bool OnEvent( const SEvent& event );  // Event handler.
+class mdcApplication : public IEventReceiver{
+	public:
+		mdcApplication();                        // Default constructor.
+		~mdcApplication();                       // Default destructor.
+		void run();                           // Main loop.
+		void buildScene();                    // Basic scene builder.
+		bool OnEvent( const SEvent& event );  // Event handler.
 
-    private:
-        // Irrlicht engine objects.
-        IrrlichtDevice         * device;
-        video::IVideoDriver    * driver;
-        scene::ISceneManager   * smgr;
-        gui::IGUIEnvironment   * guienv;
-        scene::ICameraSceneNode* camera;
+	private:
+		// Irrlicht engine objects.
+		IrrlichtDevice          *   device;
+		video::IVideoDriver     *   driver;
+		scene::ISceneManager    *   smgr;
+		gui::IGUIEnvironment    *   guienv;
+		scene::ICameraSceneNode *   camera;
 
-        int                      lastFPS;
+		mdcSettings             *   settings;
+
+		int                        lastFPS;
 };
 
 #endif // APPLICATION_H

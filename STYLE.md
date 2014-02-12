@@ -117,7 +117,7 @@ Every file must include the follwing header text at the beggining:
     ; Date created:  <date the file was created in mm/dd/yyyy format>
     ; Date modified: <date of last modification in mm/dd/yyyy format>
     ;
-    ; Copyright (C) 2013 Fundacion Museos Nacionales
+    ; Copyright (C) <Year of file creation> Fundacion Museos Nacionales
     ;
     ; This program is free software: you can redistribute it and/or modify
     ; it under the terms of the GNU General Public License as published by
