@@ -25,7 +25,6 @@
 
 int main( int argc, char** argv ) {
 	mdcApplication *app = new mdcApplication();
-	app->buildScene();
 	app->run();
 	delete app;
 

@@ -26,6 +26,7 @@
 #include <irrlicht.h>
 
 #include "Settings.h"
+#include "Scene.h"
 
 using namespace irr;
 
@@ -37,9 +38,8 @@ class mdcApplication : public IEventReceiver{
 	public:
 		mdcApplication();                        // Default constructor.
 		~mdcApplication();                       // Default destructor.
-		void run();                           // Main loop.
-		void buildScene();                    // Basic scene builder.
-		bool OnEvent( const SEvent& event );  // Event handler.
+		void run();                              // Main loop.
+		bool OnEvent( const SEvent& event );     // Event handler.
 
 	private:
 		// Irrlicht engine objects.
@@ -47,7 +47,6 @@ class mdcApplication : public IEventReceiver{
 		video::IVideoDriver     *   driver;
 		scene::ISceneManager    *   smgr;
 		gui::IGUIEnvironment    *   guienv;
-		scene::ICameraSceneNode *   camera;
 
 		mdcSettings             *   settings;
 

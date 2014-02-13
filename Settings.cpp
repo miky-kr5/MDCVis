@@ -157,7 +157,6 @@ void mdcSettings::loadSettingsFile() {
 	const stringw volumeName         ( L"volume" );
 	// Helper strings
 	const stringw sTrue              ( L"1" );
-	const stringw sFalse             ( L"0" );
 	const stringw nullDriver         ( L"Null" );
 	const stringw softDriver         ( L"Software" );
 	const stringw burnDriver         ( L"Burnings" );
@@ -172,14 +171,13 @@ void mdcSettings::loadSettingsFile() {
 
 		if ( !nullDevice ) return;
 
-		irr::io::IXMLReader* xml = nullDevice->getFileSystem()->createXMLReader(settingsFile);
+		io::IXMLReader* xml = nullDevice->getFileSystem()->createXMLReader(settingsFile);
 		if ( !xml ) return;
 
-		//while there is more to read
 		while( xml->read() ) {
 			switch( xml->getNodeType() ) {
 				case irr::io::EXN_ELEMENT: {
-					// Set the current XML section we are parsing.
+
 					if ( currentSection.empty() ) {
 
 						if ( videoTag.equals_ignore_case( xml->getNodeName() ) ) {
@@ -193,17 +191,17 @@ void mdcSettings::loadSettingsFile() {
 					} else if ( currentSection.equals_ignore_case( videoTag )
 									&& settingTag.equals_ignore_case( xml->getNodeName() ) ) {
 						// If we are parsing a setting in the video section.
-						stringw key = xml->getAttributeValueSafe(L"name");
+						stringw key = xml->getAttributeValueSafe( L"name" );
 
 						if ( !key.empty() ) {
 							if ( key.equals_ignore_case( fullScreenName ) ) {
-								fullScreen = sTrue.equals_ignore_case( xml->getAttributeValueSafe(L"value") );
+								fullScreen = sTrue.equals_ignore_case( xml->getAttributeValueSafe( L"value" ) );
 
 							} else if ( key.equals_ignore_case( vSyncName ) ) {
-								vSync = sTrue.equals_ignore_case( xml->getAttributeValueSafe(L"value") );
+								vSync = sTrue.equals_ignore_case( xml->getAttributeValueSafe( L"value" ) );
 
 							} else if ( key.equals_ignore_case( driverName ) ) {
-								stringw driverType = xml->getAttributeValueSafe(L"value");
+								stringw driverType = xml->getAttributeValueSafe( L"value" );
 
 								if ( nullDriver.equals_ignore_case( driverType ) ) {
 									driver = video::EDT_NULL;
@@ -225,13 +223,13 @@ void mdcSettings::loadSettingsFile() {
 								}
 
 							}else if ( key.equals_ignore_case( antialiasingName ) ) {
-        						core::stringc s = xml->getAttributeValueSafe(L"value");
+        						core::stringc s = xml->getAttributeValueSafe( L"value" );
         						antialiasing = core::strtol10(s.c_str());
 
 							}else if ( key.equals_ignore_case( resolutionName ) ) {
 								int i;
 								char * sp;
-        						core::stringc s = xml->getAttributeValueSafe(L"value");
+        						core::stringc s = xml->getAttributeValueSafe( L"value" );
 
         						screenDimensions->Width = core::strtol10(s.c_str());
 
