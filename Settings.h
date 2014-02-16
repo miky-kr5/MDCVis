@@ -33,12 +33,12 @@ typedef enum ANTIALIASING_FACTOR { NONE = 0, AA2 = 2, AA4 = 4, AA8 = 8, AA16 = 1
 
 class mdcSettings{
 	public:
-		static   mdcSettings *           getInstance();
-		static   void                    freeInstance();
+		static mdcSettings *             getInstance();
+		static void                      freeInstance();
 		void                             saveSettings();
 		bool                             settingsChanged();
 
-		/* Getters*/
+		// Getters
 		bool                             isFullScreen();
 		bool                             isVSyncEnabled();
 		unsigned int                     getAntialiasingFactor();
@@ -47,7 +47,7 @@ class mdcSettings{
 		u32                              getScreenHeight();
 		const core::dimension2d<u32> *   getScreenDimensions();
 
-		/* Setters */
+		// Setters
 		void                             setFullScreen( bool );
 		void                             setVSyncEnabled( bool );
 		void                             setAntialiasingFactor( antialiasing_t );
@@ -55,29 +55,31 @@ class mdcSettings{
 		void                             setScreenDimensions( const core::dimension2d<u32> * );
 
 	private:
-		/* Singleton instance and ref. counter */
-		static   mdcSettings *           instance;
+		// Singleton instance and ref. counter
+		static mdcSettings *             instance;
 		int                              refs;
 
 		string                           settingsPath;
 		bool                             canUseSettings;
 		bool                             changed;
-		irr::IrrlichtDevice *            nullDevice;
 
-		/* Video Settings */
+		// Video Settings
 		bool                             fullScreen;
 		bool                             vSync;
 		unsigned int                     antialiasing;
 		video::E_DRIVER_TYPE             driver;
 		core::dimension2d<u32> *         screenDimensions;
 
-		/* Key mappings */
+		// Key mappings
 
-		/* Constructors and destructors */
-		mdcSettings();
-		~mdcSettings();
+		// The default and copy constructors, the destructor and the assignment
+		// operator are private to enforce the singleton design pattern.
+		mdcSettings( );
+		mdcSettings( mdcSettings const & ){ };
+		~mdcSettings( );
+		mdcSettings &                    operator=( mdcSettings const &){ };
 
-		/* Helper methods */
+		// Helper methods
 		void                             createSettingsFile();
 		void                             loadSettingsFile();
 		bool                             settingsDirExists();

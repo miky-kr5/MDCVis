@@ -22,4 +22,5 @@ obj/
 *.d
 *.depend
 *.layout
+*.cbTemp
 *~

@@ -36,6 +36,7 @@ class mdcScene {
 																	  SKeyMap backward,
 																	  SKeyMap strafeL,
 																	  SKeyMap strafeR );
+
 	private:
 		scene::ICameraSceneNode            *     camera;
 		scene::ISceneNodeAnimatorCameraFPS *     animator;

@@ -82,12 +82,18 @@ void mdcSettings::freeInstance() {
 
 mdcSettings::mdcSettings(): refs( 0 ), changed(false) {
 	screenDimensions = new core::dimension2d<u32>();
-	nullDevice = irr::createDevice(irr::video::EDT_NULL);
 
 	char * userHome = getenv( "HOME" );
 	if ( userHome != NULL ) {
 		settingsPath = userHome;
+
+#if defined( _WIN32 ) || defined( __MINGW32__ )
+		settingsPath += "\\.mdcvis\\";
+#elif defined( __linux__ )
 		settingsPath += "/.mdcvis/";
+#else
+#error "Not a GNU/Linux or Windows platform."
+#endif
 
 		// Check if the settings directory exists.
 		// It may not exists if this is the first time the app has been executed.
@@ -114,8 +120,6 @@ mdcSettings::mdcSettings(): refs( 0 ), changed(false) {
 		}
 
 		loadSettingsFile();
-
-		nullDevice->drop();
 	}
 }
 
@@ -166,14 +170,44 @@ void mdcSettings::loadSettingsFile() {
 
 	if ( canUseSettings ) {
 		stringw currentSection;
-		core::stringw settingsFile = settingsPath.c_str();
-		settingsFile += L"settings.xml";
+		core::stringw settingsFile =  settingsPath.c_str();
+		settingsFile               += L"settings.xml";
 
-		if ( !nullDevice ) return;
+		// Create an irrLicht XML file reader.
+		irr::IrrlichtDevice * nullDevice = irr::createDevice(irr::video::EDT_NULL);
+		if ( !nullDevice ){
+			// If we could not get a null device then disable settings file I/O
+			// and set default settings.
+			cerr << "Failed to get an irrLicht  null device." << endl;
+
+			canUseSettings = false;
+			antialiasing = 0;
+			fullScreen = false;
+			screenDimensions->Width = 800;
+			screenDimensions->Height = 600;
+			vSync = false;
+			driver = video::EDT_OPENGL;
+
+			return;
+		}
 
 		io::IXMLReader* xml = nullDevice->getFileSystem()->createXMLReader(settingsFile);
-		if ( !xml ) return;
+		if ( !xml ){
+			// If we could not get an XML reader, ditto.
+			cerr << "Failed to create an irrLicht XML file reader." << endl;
 
+			canUseSettings = false;
+			antialiasing = 0;
+			fullScreen = false;
+			screenDimensions->Width = 800;
+			screenDimensions->Height = 600;
+			vSync = false;
+			driver = video::EDT_OPENGL;
+
+			return;
+		}
+
+		// Read the settings from the XML file.
 		while( xml->read() ) {
 			switch( xml->getNodeType() ) {
 				case irr::io::EXN_ELEMENT: {
@@ -234,19 +268,22 @@ void mdcSettings::loadSettingsFile() {
         						screenDimensions->Width = core::strtol10(s.c_str());
 
         						sp = const_cast< char * >( s.c_str() );
-        						for ( i = 0; sp[i]; ){
-        							if( sp[i++] == 'x' ) break;
+        						for ( i = 0; sp[ i ]; ){
+        							if( sp[ i++ ] == 'x' ) break;
         						}
 
-        						screenDimensions->Height = core::strtol10( & ( s.c_str()[i] ) );
+        						screenDimensions->Height = core::strtol10( & ( s.c_str()[ i ] ) );
 							}
 						}
 
 					} else if ( currentSection.equals_ignore_case( controlsTag )
 									&& settingTag.equals_ignore_case( xml->getNodeName() ) ) {
+						// TODO.
 
 					} else if ( currentSection.equals_ignore_case( audioTag )
 									&& settingTag.equals_ignore_case( xml->getNodeName() ) ) {
+						// TODO.
+
 					}
 				}
 				break;
@@ -256,11 +293,13 @@ void mdcSettings::loadSettingsFile() {
 					break;
 
                 default:
+                	// Ignore.
                 	break;
             }
         }
 
         xml->drop();
+        nullDevice->drop();
 	}
 }
 
@@ -276,29 +315,36 @@ void mdcSettings::saveSettings() {
 			case video::EDT_NULL:
 				ofs << "    <setting name=\"driver\"        value=\"Null\">\n";
 				break;
+
 			case video::EDT_SOFTWARE:
 				ofs << "    <setting name=\"driver\"        value=\"Software\">\n";
 				break;
+
 			case video::EDT_BURNINGSVIDEO:
 				ofs << "    <setting name=\"driver\"        value=\"Burnings\">\n";
 				break;
+
 			case video::EDT_DIRECT3D8:
 				ofs << "    <setting name=\"driver\"        value=\"DirectX8\">\n";
 				break;
+
 			case video::EDT_DIRECT3D9:
 				ofs << "    <setting name=\"driver\"        value=\"DirectX9\">\n";
 				break;
+
 			case video::EDT_OPENGL:
 				ofs << "    <setting name=\"driver\"        value=\"OpenGL\">\n";
 				break;
+
 			case video::EDT_COUNT:
-				assert(driver == video::EDT_COUNT);
+				// Driver should never be EDT_COUNT.
+				assert( !( driver == video::EDT_COUNT ) );
 				break;
 		}
 
-		ofs << "    <setting name=\"fullscreen\"    value=\"" << (fullScreen ? 1 : 0) << "\">\n";
+		ofs << "    <setting name=\"fullscreen\"    value=\"" << ( fullScreen ? 1 : 0 ) << "\">\n";
 		ofs << "    <setting name=\"antialiasing\"  value=\"" << antialiasing << "\">\n";
-		ofs << "    <setting name=\"vsync\"         value=\"" << (vSync ? 1 : 0) << "\">\n";
+		ofs << "    <setting name=\"vsync\"         value=\"" << ( vSync ? 1 : 0 ) << "\">\n";
 		ofs << "    <setting name=\"resolution\"    value=\"" << screenDimensions->Width << "x"
 			<< screenDimensions->Height << "\">\n";
 
