@@ -46,6 +46,10 @@ class mdcSettings{
 		u32                              getScreenWidth();
 		u32                              getScreenHeight();
 		const core::dimension2d<u32> *   getScreenDimensions();
+		SKeyMap *                        getForwardKey();
+		SKeyMap *                        getBackwardKey();
+		SKeyMap *                        getStrafeLeftKey();
+		SKeyMap *                        getStrafeRightKey();
 
 		// Setters
 		void                             setFullScreen( bool );
@@ -53,6 +57,10 @@ class mdcSettings{
 		void                             setAntialiasingFactor( antialiasing_t );
 		void                             setVideoDriverType( video::E_DRIVER_TYPE );
 		void                             setScreenDimensions( const core::dimension2d<u32> * );
+		void                             setForwardKey( char );
+		void                             setBackwardKey( char );
+		void                             setStrafeLeftKey( char );
+		void                             setStrafeRightKey( char );
 
 	private:
 		// Singleton instance and ref. counter
@@ -71,19 +79,24 @@ class mdcSettings{
 		core::dimension2d<u32> *         screenDimensions;
 
 		// Key mappings
+		SKeyMap                          forward;
+		SKeyMap                          backward;
+		SKeyMap                          s_left;
+		SKeyMap                          s_right;
 
 		// The default and copy constructors, the destructor and the assignment
 		// operator are private to enforce the singleton design pattern.
 		mdcSettings( );
 		mdcSettings( mdcSettings const & ){ };
 		~mdcSettings( );
-		mdcSettings &                    operator=( mdcSettings const &){ };
+		mdcSettings &                    operator=( mdcSettings const &){ return *instance; };
 
 		// Helper methods
 		void                             createSettingsFile();
 		void                             loadSettingsFile();
 		bool                             settingsDirExists();
 		bool                             settingsFileExists();
+		void                             setKeyMapKey(char, SKeyMap &);
 };
 
 #endif // SETTINGS_H

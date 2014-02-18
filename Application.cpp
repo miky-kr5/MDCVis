@@ -56,7 +56,14 @@ mdcApplication::mdcApplication(){
 	smgr = device->getSceneManager();
 	guienv = device->getGUIEnvironment();
 
-	new mdcScene(device);
+	scene = new mdcScene(device);
+
+	SKeyMap * f = settings->getForwardKey();
+	SKeyMap * b = settings->getBackwardKey();
+	SKeyMap * sl = settings->getStrafeLeftKey();
+	SKeyMap * sr = settings->getStrafeRightKey();
+
+	scene->changeCameraKeyMaps(*f, *b, *sl, *sr);
 
 	lastFPS = -1;
 }

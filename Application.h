@@ -36,21 +36,22 @@ using namespace irr;
 ;-----------------------------------------------------------------------------*/
 class mdcApplication : public IEventReceiver{
 	public:
-		mdcApplication();                        // Default constructor.
-		~mdcApplication();                       // Default destructor.
-		void run();                              // Main loop.
-		bool OnEvent( const SEvent& event );     // Event handler.
+		mdcApplication();
+		~mdcApplication();
+		void                        run();
+		bool                        OnEvent( const SEvent& event );
 
 	private:
 		// Irrlicht engine objects.
-		IrrlichtDevice          *   device;
-		video::IVideoDriver     *   driver;
-		scene::ISceneManager    *   smgr;
-		gui::IGUIEnvironment    *   guienv;
+		IrrlichtDevice *            device;
+		video::IVideoDriver *       driver;
+		scene::ISceneManager *      smgr;
+		gui::IGUIEnvironment *      guienv;
 
-		mdcSettings             *   settings;
+		mdcSettings *               settings;
+		mdcScene *                  scene;
 
-		int                        lastFPS;
+		int                         lastFPS;
 };
 
 #endif // APPLICATION_H

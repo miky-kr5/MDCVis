@@ -23,6 +23,7 @@
 #include <cstdlib>
 #include <cassert>
 #include <cstring>
+#include <cctype>
 #include <iostream>
 #include <fstream>
 #include <sys/types.h>
@@ -96,7 +97,7 @@ mdcSettings::mdcSettings(): refs( 0 ), changed(false) {
 #endif
 
 		// Check if the settings directory exists.
-		// It may not exists if this is the first time the app has been executed.
+		// It may not exist if this is the first time the app has been executed.
 		if ( !settingsDirExists() ) {
 			string command;
 			int success;
@@ -114,7 +115,7 @@ mdcSettings::mdcSettings(): refs( 0 ), changed(false) {
 		}
 
 		// Check if the settings file exists.
-		// It may not exists if this is the first time the app has been executed.
+		// It may not exist if this is the first time the app has been executed.
 		if ( !settingsFileExists() ) {
 			createSettingsFile();
 		}
@@ -166,7 +167,9 @@ void mdcSettings::loadSettingsFile() {
 	const stringw burnDriver         ( L"Burnings" );
 	const stringw dx8Driver          ( L"DirectX8" );
 	const stringw dx9Driver          ( L"DirectX9" );
-	const stringw oglDriver          ( L"OpenGL" );;
+	const stringw oglDriver          ( L"OpenGL" );
+
+	stringw                          key;
 
 	if ( canUseSettings ) {
 		stringw currentSection;
@@ -222,10 +225,9 @@ void mdcSettings::loadSettingsFile() {
 							currentSection = controlsTag;
 						}
 
-					} else if ( currentSection.equals_ignore_case( videoTag )
-									&& settingTag.equals_ignore_case( xml->getNodeName() ) ) {
-						// If we are parsing a setting in the video section.
-						stringw key = xml->getAttributeValueSafe( L"name" );
+					} else if ( currentSection.equals_ignore_case( videoTag ) && settingTag.equals_ignore_case( xml->getNodeName() ) ) {
+
+						key = xml->getAttributeValueSafe( L"name" );
 
 						if ( !key.empty() ) {
 							if ( key.equals_ignore_case( fullScreenName ) ) {
@@ -276,14 +278,36 @@ void mdcSettings::loadSettingsFile() {
 							}
 						}
 
-					} else if ( currentSection.equals_ignore_case( controlsTag )
-									&& settingTag.equals_ignore_case( xml->getNodeName() ) ) {
-						// TODO.
+					} else if ( currentSection.equals_ignore_case( controlsTag ) && keyTag.equals_ignore_case( xml->getNodeName() ) ) {
 
-					} else if ( currentSection.equals_ignore_case( audioTag )
-									&& settingTag.equals_ignore_case( xml->getNodeName() ) ) {
-						// TODO.
+						key = xml->getAttributeValueSafe( L"name" );
 
+						if ( !key.empty() ) {
+							if ( key.equals_ignore_case( forwardName ) ) {
+								core::stringc f_key = xml->getAttributeValueSafe( L"value" );
+								forward.Action = EKA_MOVE_FORWARD;
+								setKeyMapKey( f_key[ 0 ], forward );
+
+							} else if ( key.equals_ignore_case( backwardName ) ) {
+								core::stringc b_key = xml->getAttributeValueSafe( L"value" );
+								backward.Action = EKA_MOVE_BACKWARD;
+								setKeyMapKey( b_key[ 0 ], backward );
+
+							} else if ( key.equals_ignore_case( strafeLeftName ) ) {
+								core::stringc s_key = xml->getAttributeValueSafe( L"value" );
+								s_left.Action = EKA_STRAFE_LEFT;
+								setKeyMapKey( s_key[ 0 ], s_left );
+
+							} else if ( key.equals_ignore_case( strafeRightName ) ) {
+								core::stringc s_key = xml->getAttributeValueSafe( L"value" );
+								s_right.Action = EKA_STRAFE_RIGHT;
+								setKeyMapKey( s_key[ 0 ], s_right );
+
+							}
+						}
+
+					} else if ( currentSection.equals_ignore_case( audioTag ) && settingTag.equals_ignore_case( xml->getNodeName() ) ) {
+						// UNUSED.
 					}
 				}
 				break;
@@ -390,6 +414,54 @@ bool mdcSettings::settingsFileExists() {
 	}
 }
 
+void mdcSettings::setKeyMapKey( char c, SKeyMap & key ) {
+	char l_c = tolower( c );
+
+	switch ( l_c ) {
+		case 'a': key.KeyCode = KEY_KEY_A; break;
+		case 'b': key.KeyCode = KEY_KEY_B; break;
+		case 'c': key.KeyCode = KEY_KEY_C; break;
+		case 'd': key.KeyCode = KEY_KEY_D; break;
+		case 'e': key.KeyCode = KEY_KEY_E; break;
+		case 'f': key.KeyCode = KEY_KEY_F; break;
+		case 'g': key.KeyCode = KEY_KEY_G; break;
+		case 'h': key.KeyCode = KEY_KEY_H; break;
+		case 'i': key.KeyCode = KEY_KEY_I; break;
+		case 'j': key.KeyCode = KEY_KEY_J; break;
+		case 'k': key.KeyCode = KEY_KEY_K; break;
+		case 'l': key.KeyCode = KEY_KEY_L; break;
+		case 'm': key.KeyCode = KEY_KEY_M; break;
+		case 'n': key.KeyCode = KEY_KEY_N; break;
+		case 'o': key.KeyCode = KEY_KEY_O; break;
+		case 'p': key.KeyCode = KEY_KEY_P; break;
+		case 'q': key.KeyCode = KEY_KEY_Q; break;
+		case 'r': key.KeyCode = KEY_KEY_R; break;
+		case 's': key.KeyCode = KEY_KEY_S; break;
+		case 't': key.KeyCode = KEY_KEY_T; break;
+		case 'u': key.KeyCode = KEY_KEY_U; break;
+		case 'v': key.KeyCode = KEY_KEY_V; break;
+		case 'w': key.KeyCode = KEY_KEY_W; break;
+		case 'x': key.KeyCode = KEY_KEY_X; break;
+		case 'y': key.KeyCode = KEY_KEY_Y; break;
+		case 'z': key.KeyCode = KEY_KEY_Z; break;
+		case '0': key.KeyCode = KEY_KEY_0; break;
+		case '1': key.KeyCode = KEY_KEY_1; break;
+		case '2': key.KeyCode = KEY_KEY_2; break;
+		case '3': key.KeyCode = KEY_KEY_3; break;
+		case '4': key.KeyCode = KEY_KEY_4; break;
+		case '5': key.KeyCode = KEY_KEY_5; break;
+		case '6': key.KeyCode = KEY_KEY_6; break;
+		case '7': key.KeyCode = KEY_KEY_7; break;
+		case '8': key.KeyCode = KEY_KEY_8; break;
+		case '9': key.KeyCode = KEY_KEY_9; break;
+		case '^': key.KeyCode = KEY_UP;    break;
+		case '<': key.KeyCode = KEY_LEFT;  break;
+		case '>': key.KeyCode = KEY_RIGHT; break;
+		case ',': key.KeyCode = KEY_DOWN;  break;
+		default : assert( 0 );             break;
+	}
+}
+
 /* Getters */
 bool mdcSettings::settingsChanged(){
 	return changed;
@@ -423,6 +495,23 @@ const core::dimension2d<u32> * mdcSettings::getScreenDimensions() {
 	return const_cast< const core::dimension2d<u32> * > ( screenDimensions );
 }
 
+SKeyMap * mdcSettings::getForwardKey() {
+	return &forward;
+}
+
+SKeyMap * mdcSettings::getBackwardKey() {
+	return &backward;
+}
+
+SKeyMap * mdcSettings::getStrafeLeftKey() {
+	return &s_left;
+}
+
+SKeyMap * mdcSettings::getStrafeRightKey() {
+	return &s_right;
+}
+
+
 /* Setters */
 void mdcSettings::setFullScreen( bool isFullScreen) {
 	changed = true;
@@ -447,4 +536,20 @@ void mdcSettings::setVideoDriverType( video::E_DRIVER_TYPE newDriverType ) {
 void mdcSettings::setScreenDimensions( const core::dimension2d<u32> * newDimensions ) {
 	changed = true;
 	screenDimensions = const_cast< core::dimension2d<u32> * >( newDimensions );
+}
+
+void mdcSettings::setForwardKey( char key ) {
+	setKeyMapKey( key, forward );
+}
+
+void mdcSettings::setBackwardKey( char key ) {
+	setKeyMapKey( key, backward );
+}
+
+void mdcSettings::setStrafeLeftKey( char key ) {
+	setKeyMapKey( key, s_left );
+}
+
+void mdcSettings::setStrafeRightKey( char key ) {
+	setKeyMapKey( key, s_right );
 }
