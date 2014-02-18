@@ -33,8 +33,8 @@ class mdcScene {
 		mdcScene( IrrlichtDevice * );
 		~mdcScene();
 
-		void changeCameraKeyMaps( SKeyMap, SKeyMap, SKeyMap, SKeyMap );
-		void addMeshToCollisionDetection( scene::IAnimatedMesh *, scene::ISceneNode *);
+		void changeCameraKeyMaps( SKeyMap, SKeyMap, SKeyMap, SKeyMap )                 const;
+		void addMeshToCollisionDetection( scene::IAnimatedMesh *, scene::ISceneNode *) const;
 
 	private:
 		scene::ICameraSceneNode *                        camera;

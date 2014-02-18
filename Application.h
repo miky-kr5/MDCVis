@@ -48,7 +48,7 @@ class mdcApplication : public IEventReceiver{
 		scene::ISceneManager *      smgr;
 		gui::IGUIEnvironment *      guienv;
 
-		mdcSettings *               settings;
+		mdcSettingsMdl *            settings;
 		mdcScene *                  scene;
 
 		int                         lastFPS;

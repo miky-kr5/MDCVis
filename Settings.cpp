@@ -59,11 +59,11 @@ const string DEF_SETTINGS = "<?xml version=\"1.0\"?>\n"
                             "  </audio>\n"
                             "</mdcvis>\n";
 
-mdcSettings * mdcSettings::instance = NULL;
+mdcSettingsMdl * mdcSettingsMdl::instance = NULL;
 
-mdcSettings * mdcSettings::getInstance() {
+mdcSettingsMdl * mdcSettingsMdl::getInstance() {
 	if ( instance == NULL ) {
-		instance = new mdcSettings();
+		instance = new mdcSettingsMdl();
 	}
 
 	instance->refs++;
@@ -71,7 +71,7 @@ mdcSettings * mdcSettings::getInstance() {
 	return instance;
 }
 
-void mdcSettings::freeInstance() {
+void mdcSettingsMdl::freeInstance() {
 	if ( instance != NULL ) {
 		instance->refs--;
 
@@ -81,7 +81,7 @@ void mdcSettings::freeInstance() {
 	}
 }
 
-mdcSettings::mdcSettings(): refs( 0 ), changed(false) {
+mdcSettingsMdl::mdcSettingsMdl(): refs( 0 ), changed(false) {
 	screenDimensions = new core::dimension2d<u32>();
 
 	char * userHome = getenv( "HOME" );
@@ -124,13 +124,13 @@ mdcSettings::mdcSettings(): refs( 0 ), changed(false) {
 	}
 }
 
-mdcSettings::~mdcSettings() {
+mdcSettingsMdl::~mdcSettingsMdl() {
 	delete screenDimensions;
 }
 
 /* Methods*/
 
-void mdcSettings::createSettingsFile() {
+void mdcSettingsMdl::createSettingsFile() const {
 	if ( canUseSettings ) {
 		string settingsFile = settingsPath + "settings.xml";
 
@@ -140,7 +140,7 @@ void mdcSettings::createSettingsFile() {
 	}
 }
 
-void mdcSettings::loadSettingsFile() {
+void mdcSettingsMdl::loadSettingsFile() {
 	const stringw settingTag         ( L"setting" );
 	const stringw keyTag             ( L"key" );
 	// Section names
@@ -327,7 +327,7 @@ void mdcSettings::loadSettingsFile() {
 	}
 }
 
-void mdcSettings::saveSettings() {
+void mdcSettingsMdl::saveSettings() const {
 	if ( canUseSettings ) {
 		string settingsFile = settingsPath + "settings.xml";
 
@@ -389,7 +389,7 @@ void mdcSettings::saveSettings() {
 	}
 }
 
-bool mdcSettings::settingsDirExists() {
+bool mdcSettingsMdl::settingsDirExists() const {
 	struct stat info;
 
 	stat( settingsPath.c_str(), &info );
@@ -401,7 +401,7 @@ bool mdcSettings::settingsDirExists() {
 	}
 }
 
-bool mdcSettings::settingsFileExists() {
+bool mdcSettingsMdl::settingsFileExists() const {
 	string settingsFile = settingsPath + "settings.xml";
 	ifstream ifs( settingsFile.c_str() );
 
@@ -414,7 +414,7 @@ bool mdcSettings::settingsFileExists() {
 	}
 }
 
-void mdcSettings::setKeyMapKey( char c, SKeyMap & key ) {
+void mdcSettingsMdl::setKeyMapKey( char c, SKeyMap & key ) const {
 	char l_c = tolower( c );
 
 	switch ( l_c ) {
@@ -463,93 +463,93 @@ void mdcSettings::setKeyMapKey( char c, SKeyMap & key ) {
 }
 
 /* Getters */
-bool mdcSettings::settingsChanged(){
+bool mdcSettingsMdl::settingsChanged() const {
 	return changed;
 }
 
-bool mdcSettings::isFullScreen() {
+bool mdcSettingsMdl::isFullScreen() const {
 	return fullScreen;
 }
 
-bool mdcSettings::isVSyncEnabled() {
+bool mdcSettingsMdl::isVSyncEnabled() const {
 	return vSync;
 }
 
-unsigned int mdcSettings::getAntialiasingFactor() {
+unsigned int mdcSettingsMdl::getAntialiasingFactor() const {
 	return antialiasing;
 }
 
-video::E_DRIVER_TYPE mdcSettings::getVideoDriverType() {
+video::E_DRIVER_TYPE mdcSettingsMdl::getVideoDriverType() const {
 	return driver;
 }
 
-u32 mdcSettings::getScreenWidth() {
+u32 mdcSettingsMdl::getScreenWidth() const {
 	return screenDimensions->Width;
 }
 
-u32 mdcSettings::getScreenHeight() {
+u32 mdcSettingsMdl::getScreenHeight() const {
 	return screenDimensions->Height;
 }
 
-const core::dimension2d<u32> * mdcSettings::getScreenDimensions() {
+const core::dimension2d<u32> * mdcSettingsMdl::getScreenDimensions() const {
 	return const_cast< const core::dimension2d<u32> * > ( screenDimensions );
 }
 
-SKeyMap * mdcSettings::getForwardKey() {
+const SKeyMap * mdcSettingsMdl::getForwardKey() const {
 	return &forward;
 }
 
-SKeyMap * mdcSettings::getBackwardKey() {
+const SKeyMap * mdcSettingsMdl::getBackwardKey() const {
 	return &backward;
 }
 
-SKeyMap * mdcSettings::getStrafeLeftKey() {
+const SKeyMap * mdcSettingsMdl::getStrafeLeftKey() const {
 	return &s_left;
 }
 
-SKeyMap * mdcSettings::getStrafeRightKey() {
+const SKeyMap * mdcSettingsMdl::getStrafeRightKey() const {
 	return &s_right;
 }
 
 
 /* Setters */
-void mdcSettings::setFullScreen( bool isFullScreen) {
+void mdcSettingsMdl::setFullScreen( bool isFullScreen) {
 	changed = true;
 	fullScreen = isFullScreen;
 }
 
-void mdcSettings::setVSyncEnabled( bool isVSyncEnabled ) {
+void mdcSettingsMdl::setVSyncEnabled( bool isVSyncEnabled ) {
 	changed = true;
 	vSync = isVSyncEnabled;
 }
 
-void mdcSettings::setAntialiasingFactor( antialiasing_t factor ) {
+void mdcSettingsMdl::setAntialiasingFactor( aaFactor_t factor ) {
 	changed = true;
 	antialiasing = factor;
 }
 
-void mdcSettings::setVideoDriverType( video::E_DRIVER_TYPE newDriverType ) {
+void mdcSettingsMdl::setVideoDriverType( video::E_DRIVER_TYPE newDriverType ) {
 	changed = true;
 	driver = newDriverType;
 }
 
-void mdcSettings::setScreenDimensions( const core::dimension2d<u32> * newDimensions ) {
+void mdcSettingsMdl::setScreenDimensions( const core::dimension2d<u32> * newDimensions ) {
 	changed = true;
 	screenDimensions = const_cast< core::dimension2d<u32> * >( newDimensions );
 }
 
-void mdcSettings::setForwardKey( char key ) {
+void mdcSettingsMdl::setForwardKey( char key ) {
 	setKeyMapKey( key, forward );
 }
 
-void mdcSettings::setBackwardKey( char key ) {
+void mdcSettingsMdl::setBackwardKey( char key ) {
 	setKeyMapKey( key, backward );
 }
 
-void mdcSettings::setStrafeLeftKey( char key ) {
+void mdcSettingsMdl::setStrafeLeftKey( char key ) {
 	setKeyMapKey( key, s_left );
 }
 
-void mdcSettings::setStrafeRightKey( char key ) {
+void mdcSettingsMdl::setStrafeRightKey( char key ) {
 	setKeyMapKey( key, s_right );
 }

@@ -29,32 +29,32 @@
 using namespace irr;
 using std::string;
 
-typedef enum ANTIALIASING_FACTOR { NONE = 0, AA2 = 2, AA4 = 4, AA8 = 8, AA16 = 16 } antialiasing_t;
+typedef enum ANTIALIASING_FACTOR { NONE = 0, AA2 = 2, AA4 = 4, AA8 = 8, AA16 = 16 } aaFactor_t;
 
-class mdcSettings{
+class mdcSettingsMdl{
 	public:
-		static mdcSettings *             getInstance();
+		static mdcSettingsMdl *          getInstance();
 		static void                      freeInstance();
-		void                             saveSettings();
-		bool                             settingsChanged();
+		void                             saveSettings()          const;
+		bool                             settingsChanged()       const;
 
 		// Getters
-		bool                             isFullScreen();
-		bool                             isVSyncEnabled();
-		unsigned int                     getAntialiasingFactor();
-		video::E_DRIVER_TYPE             getVideoDriverType();
-		u32                              getScreenWidth();
-		u32                              getScreenHeight();
-		const core::dimension2d<u32> *   getScreenDimensions();
-		SKeyMap *                        getForwardKey();
-		SKeyMap *                        getBackwardKey();
-		SKeyMap *                        getStrafeLeftKey();
-		SKeyMap *                        getStrafeRightKey();
+		bool                             isFullScreen()          const;
+		bool                             isVSyncEnabled()        const;
+		unsigned int                     getAntialiasingFactor() const;
+		video::E_DRIVER_TYPE             getVideoDriverType()    const;
+		u32                              getScreenWidth()        const;
+		u32                              getScreenHeight()       const;
+		const core::dimension2d<u32> *   getScreenDimensions()   const;
+		const SKeyMap *                  getForwardKey()         const;
+		const SKeyMap *                  getBackwardKey()        const;
+		const SKeyMap *                  getStrafeLeftKey()      const;
+		const SKeyMap *                  getStrafeRightKey()     const;
 
 		// Setters
 		void                             setFullScreen( bool );
 		void                             setVSyncEnabled( bool );
-		void                             setAntialiasingFactor( antialiasing_t );
+		void                             setAntialiasingFactor( aaFactor_t );
 		void                             setVideoDriverType( video::E_DRIVER_TYPE );
 		void                             setScreenDimensions( const core::dimension2d<u32> * );
 		void                             setForwardKey( char );
@@ -64,7 +64,7 @@ class mdcSettings{
 
 	private:
 		// Singleton instance and ref. counter
-		static mdcSettings *             instance;
+		static mdcSettingsMdl *          instance;
 		int                              refs;
 
 		string                           settingsPath;
@@ -86,17 +86,17 @@ class mdcSettings{
 
 		// The default and copy constructors, the destructor and the assignment
 		// operator are private to enforce the singleton design pattern.
-		mdcSettings( );
-		mdcSettings( mdcSettings const & ){ };
-		~mdcSettings( );
-		mdcSettings &                    operator=( mdcSettings const &){ return *instance; };
+		mdcSettingsMdl( );
+		mdcSettingsMdl( mdcSettingsMdl const & ){ };
+		~mdcSettingsMdl( );
+		mdcSettingsMdl &                 operator=( mdcSettingsMdl const &){ return *instance; };
 
 		// Helper methods
-		void                             createSettingsFile();
+		void                             createSettingsFile()          const;
 		void                             loadSettingsFile();
-		bool                             settingsDirExists();
-		bool                             settingsFileExists();
-		void                             setKeyMapKey(char, SKeyMap &);
+		bool                             settingsDirExists()           const;
+		bool                             settingsFileExists()          const;
+		void                             setKeyMapKey(char, SKeyMap &) const;
 };
 
 #endif // SETTINGS_H

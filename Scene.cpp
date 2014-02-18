@@ -47,11 +47,11 @@ mdcScene::mdcScene( IrrlichtDevice * device ) {
 	const stringw right            ( L"right" );
 
 	// Scene model and collision data.
-	SKeyMap                                          keyMap[4];
-	core::list< scene::ISceneNodeAnimator * >        camAnimators;
-	scene::IAnimatedMesh *                           mesh;
-	scene::ISceneNode *                              node;
-	scene::ITriangleSelector *                       mapSelector;
+	SKeyMap                                   keyMap[4];
+	core::list< scene::ISceneNodeAnimator * > camAnimators;
+	scene::IAnimatedMesh *                    mesh;
+	scene::ISceneNode *                       node;
+	scene::ITriangleSelector *                mapSelector;
 
 	// Possible scene object flags.
 	bool solid;
@@ -88,16 +88,16 @@ mdcScene::mdcScene( IrrlichtDevice * device ) {
 
 
 	// Load the scene file into the virtual filesystem.
-	device->getFileSystem()->addFileArchive("mdc.zip");
+	device->getFileSystem()->addFileArchive( "mdc.zip" );
 
 	// Get the XML reader.
-	xml = device->getFileSystem()->createXMLReader("scene.xml");
+	xml = device->getFileSystem()->createXMLReader( "scene.xml" );
 
 	// Disable mipmap generation.
 	driver->setTextureCreationFlag( video::ETCF_CREATE_MIP_MAPS, false );
 
 	// Create the camera.
-	camera = smgr->addCameraSceneNodeFPS( NULL, CAMERA_ROTATE_SPEED, MOVEMENT_SPEED, -1, keyMap, 4);
+	camera = smgr->addCameraSceneNodeFPS( NULL, CAMERA_ROTATE_SPEED, MOVEMENT_SPEED, -1, keyMap, 4 );
 	camera->setPosition( core::vector3df( START_POSITION ) );
 	camera->setTarget( core::vector3df( LOOK_AT ) );
 	camera->setFarValue( FAR_UNITS );
@@ -242,7 +242,7 @@ mdcScene::~mdcScene(){
 	collider->drop();
 }
 
-void mdcScene::addMeshToCollisionDetection( scene::IAnimatedMesh * mesh, scene::ISceneNode * node ) {
+void mdcScene::addMeshToCollisionDetection( scene::IAnimatedMesh * mesh, scene::ISceneNode * node ) const {
 	scene::ITriangleSelector * mapSelector;
 
 	mapSelector = smgr->createOctreeTriangleSelector( mesh->getMesh(0), node, MIN_POLYGONS );
@@ -251,7 +251,7 @@ void mdcScene::addMeshToCollisionDetection( scene::IAnimatedMesh * mesh, scene::
 	mapSelector->drop();
 }
 
-void mdcScene::changeCameraKeyMaps( SKeyMap forward, SKeyMap backward, SKeyMap strafeL, SKeyMap strafeR ) {
+void mdcScene::changeCameraKeyMaps( SKeyMap forward, SKeyMap backward, SKeyMap strafeL, SKeyMap strafeR ) const {
 	SKeyMap keyMap[ 4 ];
 
 	keyMap[ 0 ].Action  = EKA_MOVE_FORWARD;

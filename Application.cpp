@@ -31,7 +31,7 @@
 ; parameters for the irrLicht Engine.
 ;-----------------------------------------------------------------------------*/
 mdcApplication::mdcApplication(){
-	settings = mdcSettings::getInstance();
+	settings = mdcSettingsMdl::getInstance();
 
 	SIrrlichtCreationParameters params = SIrrlichtCreationParameters();
 
@@ -58,10 +58,10 @@ mdcApplication::mdcApplication(){
 
 	scene = new mdcScene(device);
 
-	SKeyMap * f  = settings->getForwardKey();
-	SKeyMap * b  = settings->getBackwardKey();
-	SKeyMap * sl = settings->getStrafeLeftKey();
-	SKeyMap * sr = settings->getStrafeRightKey();
+	const SKeyMap * f  = settings->getForwardKey();
+	const SKeyMap * b  = settings->getBackwardKey();
+	const SKeyMap * sl = settings->getStrafeLeftKey();
+	const SKeyMap * sr = settings->getStrafeRightKey();
 
 	scene->changeCameraKeyMaps(*f, *b, *sl, *sr);
 
