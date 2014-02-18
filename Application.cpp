@@ -35,11 +35,11 @@ mdcApplication::mdcApplication(){
 
 	SIrrlichtCreationParameters params = SIrrlichtCreationParameters();
 
-	params.AntiAlias = (u8) settings->getAntialiasingFactor();
+	params.AntiAlias  = (u8) settings->getAntialiasingFactor();
 	params.DriverType = settings->getVideoDriverType();
 	params.WindowSize = core::dimension2d<u32>( settings->getScreenWidth(), settings->getScreenHeight() );
 	params.Fullscreen = settings->isFullScreen();
-	params.Vsync = settings->isVSyncEnabled();
+	params.Vsync      = settings->isVSyncEnabled();
 
 	params.EventReceiver = this;
 
@@ -53,13 +53,13 @@ mdcApplication::mdcApplication(){
 
 	// Get pointers to the engine objects to avoid calling the getters at a later time.
 	driver = device->getVideoDriver();
-	smgr = device->getSceneManager();
+	smgr   = device->getSceneManager();
 	guienv = device->getGUIEnvironment();
 
 	scene = new mdcScene(device);
 
-	SKeyMap * f = settings->getForwardKey();
-	SKeyMap * b = settings->getBackwardKey();
+	SKeyMap * f  = settings->getForwardKey();
+	SKeyMap * b  = settings->getBackwardKey();
 	SKeyMap * sl = settings->getStrafeLeftKey();
 	SKeyMap * sr = settings->getStrafeRightKey();
 
@@ -82,6 +82,7 @@ mdcApplication::~mdcApplication(){
 		settings->saveSettings();
 
 	settings->freeInstance();
+	delete scene;
 }
 
 /*------------------------------------------------------------------------------
@@ -104,7 +105,7 @@ void mdcApplication::run(){
 
 				fps = driver->getFPS();
 
-				if( lastFPS != fps ){
+				if( settings->isFullScreen() && lastFPS != fps ){
 					str = L"Museo de Ciencias :: [";
 					str += driver->getName();
 					str += "] FPS:";

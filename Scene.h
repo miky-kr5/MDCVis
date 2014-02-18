@@ -31,15 +31,17 @@ using core::stringw;
 class mdcScene {
 	public:
 		mdcScene( IrrlichtDevice * );
+		~mdcScene();
 
-		void                                     changeCameraKeyMaps( SKeyMap forward,
-																	  SKeyMap backward,
-																	  SKeyMap strafeL,
-																	  SKeyMap strafeR );
+		void changeCameraKeyMaps( SKeyMap, SKeyMap, SKeyMap, SKeyMap );
+		void addMeshToCollisionDetection( scene::IAnimatedMesh *, scene::ISceneNode *);
 
 	private:
-		scene::ICameraSceneNode            *     camera;
-		scene::ISceneNodeAnimatorCameraFPS *     animator;
+		scene::ICameraSceneNode *                        camera;
+		scene::ISceneNodeAnimatorCameraFPS *             animator;
+		scene::IMetaTriangleSelector *                   metaSelector;
+		scene::ISceneNodeAnimatorCollisionResponse *     collider;
+		scene::ISceneManager *                           smgr;
 };
 
 #endif // SCENE_H

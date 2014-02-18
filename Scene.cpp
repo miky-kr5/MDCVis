@@ -22,6 +22,14 @@
 
 #include "Scene.h"
 
+#define START_POSITION       -0.9, 110,  1649
+#define LOOK_AT               0,   110, -1
+#define FAR_UNITS             50000.0f
+#define CAMERA_ROTATE_SPEED   100.0f
+#define MOVEMENT_SPEED        0.5f
+#define TRIANGLE_LIMIT        1024
+#define MIN_POLYGONS          128
+
 mdcScene::mdcScene( IrrlichtDevice * device ) {
 	// Section names
 	const stringw sceneTag         ( L"scene" );
@@ -41,11 +49,9 @@ mdcScene::mdcScene( IrrlichtDevice * device ) {
 	// Scene model and collision data.
 	SKeyMap                                          keyMap[4];
 	core::list< scene::ISceneNodeAnimator * >        camAnimators;
-	scene::IAnimatedMesh                        *    mesh;
-	scene::ISceneNode                           *    node;
-	scene::ITriangleSelector                    *    mapSelector;
-	scene::IMetaTriangleSelector                *    metaSelector;
-	scene::ISceneNodeAnimatorCollisionResponse  *    collider;
+	scene::IAnimatedMesh *                           mesh;
+	scene::ISceneNode *                              node;
+	scene::ITriangleSelector *                       mapSelector;
 
 	// Possible scene object flags.
 	bool solid;
@@ -63,9 +69,9 @@ mdcScene::mdcScene( IrrlichtDevice * device ) {
 	stringw rightTex;
 
 	// Pointers to the relevant irrLicht managers.
-	scene::ISceneManager *    smgr   = device->getSceneManager();
-	video::IVideoDriver  *    driver = device->getVideoDriver();
-	io::IXMLReader       *    xml    = device->getFileSystem()->createXMLReader("scene.xml");
+	video::IVideoDriver *     driver = device->getVideoDriver();
+	io::IXMLReader *          xml    = device->getFileSystem()->createXMLReader("scene.xml");
+	smgr                             = device->getSceneManager();
 
 	// Setup the keyboard controls.
 	keyMap[0].Action = EKA_MOVE_FORWARD;
@@ -84,20 +90,17 @@ mdcScene::mdcScene( IrrlichtDevice * device ) {
 	// Load the scene file into the virtual filesystem.
 	device->getFileSystem()->addFileArchive("mdc.zip");
 
-	// Get the relevant managers and the XML reader.
-	smgr   = device->getSceneManager();
-	driver = device->getVideoDriver();
-	xml    = device->getFileSystem()->createXMLReader("scene.xml");
+	// Get the XML reader.
+	xml = device->getFileSystem()->createXMLReader("scene.xml");
 
 	// Disable mipmap generation.
 	driver->setTextureCreationFlag( video::ETCF_CREATE_MIP_MAPS, false );
 
 	// Create the camera.
-	// TODO: Eliminate those magic numbers!
-	camera = smgr->addCameraSceneNodeFPS( 0, 100.0f, 0.5f, -1, keyMap, 4);
-	camera->setPosition( core::vector3df( -0.9, 110, 1649 ) );
-	camera->setTarget( core::vector3df( 0, 110, -1 ) );
-	camera->setFarValue( 50000.0f );
+	camera = smgr->addCameraSceneNodeFPS( NULL, CAMERA_ROTATE_SPEED, MOVEMENT_SPEED, -1, keyMap, 4);
+	camera->setPosition( core::vector3df( START_POSITION ) );
+	camera->setTarget( core::vector3df( LOOK_AT ) );
+	camera->setFarValue( FAR_UNITS );
 
 	// Get the camera animator to disable vertical movement.
 	// This animator will allow to change key mappings in other parts of the program.
@@ -128,8 +131,7 @@ mdcScene::mdcScene( IrrlichtDevice * device ) {
 
 					}
 
-				} else if ( currentSection.equals_ignore_case( sceneTag )
-								&& modelTag.equals_ignore_case( xml->getNodeName() ) ) {
+				} else if ( currentSection.equals_ignore_case( sceneTag ) && modelTag.equals_ignore_case( xml->getNodeName() ) ) {
 					// If we are in the scene section the load the corresponding model and
 					// add it to the scene manager.
 
@@ -144,7 +146,7 @@ mdcScene::mdcScene( IrrlichtDevice * device ) {
 
 						// Actually read the mesh and add it to the scene graph.
 						mesh = smgr->getMesh( key );
-						node = smgr->addOctreeSceneNode( mesh->getMesh( 0 ), 0, -1, 1024 );
+						node = smgr->addOctreeSceneNode( mesh->getMesh( 0 ), NULL, -1, TRIANGLE_LIMIT );
 
 						if( node ){
 							// All models ignore lighting and normalize normals for future shader use.
@@ -164,7 +166,7 @@ mdcScene::mdcScene( IrrlichtDevice * device ) {
 
 							// If the model is solid then add it to the collision selectors.
 							if ( solid ) {
-								mapSelector = smgr->createOctreeTriangleSelector( mesh->getMesh(0), node, 128 );
+								mapSelector = smgr->createOctreeTriangleSelector( mesh->getMesh(0), node, MIN_POLYGONS );
 								metaSelector->addTriangleSelector( mapSelector );
 								mapSelector->drop();
 							}
@@ -172,8 +174,7 @@ mdcScene::mdcScene( IrrlichtDevice * device ) {
 
 					}
 
-				} else if ( currentSection.equals_ignore_case( skyTag )
-								&& sideTag.equals_ignore_case( xml->getNodeName() ) ) {
+				} else if ( currentSection.equals_ignore_case( skyTag ) && sideTag.equals_ignore_case( xml->getNodeName() ) ) {
 
 					// If we are in the skybox section then load all skybox textures.
 					key = xml->getAttributeValueSafe( L"name" );
@@ -229,28 +230,40 @@ mdcScene::mdcScene( IrrlichtDevice * device ) {
 													  0.05f );
 	camera->addAnimator( collider );
 
-	// Drop all unecessary pointers.
-	metaSelector->drop();
-	collider->drop();
+
 	xml->drop();
 
 	// Reenable mipmap creation.
 	driver->setTextureCreationFlag( video::ETCF_CREATE_MIP_MAPS, true );
 }
 
-void mdcScene::changeCameraKeyMaps( SKeyMap forward, SKeyMap backward, SKeyMap strafeL, SKeyMap strafeR ){
+mdcScene::~mdcScene(){
+	metaSelector->drop();
+	collider->drop();
+}
+
+void mdcScene::addMeshToCollisionDetection( scene::IAnimatedMesh * mesh, scene::ISceneNode * node ) {
+	scene::ITriangleSelector * mapSelector;
+
+	mapSelector = smgr->createOctreeTriangleSelector( mesh->getMesh(0), node, MIN_POLYGONS );
+	metaSelector->addTriangleSelector( mapSelector );
+
+	mapSelector->drop();
+}
+
+void mdcScene::changeCameraKeyMaps( SKeyMap forward, SKeyMap backward, SKeyMap strafeL, SKeyMap strafeR ) {
 	SKeyMap keyMap[ 4 ];
 
-	keyMap[ 0 ].Action = EKA_MOVE_FORWARD;
+	keyMap[ 0 ].Action  = EKA_MOVE_FORWARD;
 	keyMap[ 0 ].KeyCode = forward.KeyCode;
 
-	keyMap[ 1 ].Action = EKA_MOVE_BACKWARD;
+	keyMap[ 1 ].Action  = EKA_MOVE_BACKWARD;
 	keyMap[ 1 ].KeyCode = backward.KeyCode;
 
-	keyMap[ 2 ].Action = EKA_STRAFE_LEFT;
+	keyMap[ 2 ].Action  = EKA_STRAFE_LEFT;
 	keyMap[ 2 ].KeyCode = strafeL.KeyCode;
 
-	keyMap[ 3 ].Action = EKA_STRAFE_RIGHT;
+	keyMap[ 3 ].Action  = EKA_STRAFE_RIGHT;
 	keyMap[ 3 ].KeyCode = strafeR.KeyCode;
 
 	animator->setKeyMap(keyMap, 4);
