@@ -25,7 +25,9 @@
 
 #include <irrlicht.h>
 
-#include "Settings.h"
+#include "definitions.h"
+#include "SettingsMdl.h"
+#include "SettingsCtrl.h"
 #include "Scene.h"
 
 using namespace irr;
@@ -34,24 +36,28 @@ using namespace irr;
 ; The core class for the program.
 ; Implements the main loop and the different scene builders.
 ;-----------------------------------------------------------------------------*/
-class mdcApplication : public IEventReceiver{
+class mdcApplication : public IEventReceiver {
 	public:
 		mdcApplication();
 		~mdcApplication();
+
+		void                        onSettingsDialogHidden();
 		void                        run();
 		bool                        OnEvent( const SEvent& event );
 
 	private:
 		// Irrlicht engine objects.
-		IrrlichtDevice *            device;
-		video::IVideoDriver *       driver;
+		IrrlichtDevice       *      device;
+		video::IVideoDriver  *      driver;
 		scene::ISceneManager *      smgr;
 		gui::IGUIEnvironment *      guienv;
 
-		mdcSettingsMdl *            settings;
-		mdcScene *                  scene;
+		mdcSettingsMdl       *      settings;
+		mdcSettingsCtrl      *      settingsCtrl;
+		mdcScene             *      scene;
 
 		int                         lastFPS;
+		bool                        settingsVisible;
 };
 
 #endif // APPLICATION_H

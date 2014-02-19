@@ -61,8 +61,13 @@
 		<Unit filename="Application.h" />
 		<Unit filename="Scene.cpp" />
 		<Unit filename="Scene.h" />
-		<Unit filename="Settings.cpp" />
-		<Unit filename="Settings.h" />
+		<Unit filename="SettingsCtrl.cpp" />
+		<Unit filename="SettingsCtrl.h" />
+		<Unit filename="SettingsDlg.cpp" />
+		<Unit filename="SettingsDlg.h" />
+		<Unit filename="SettingsMdl.cpp" />
+		<Unit filename="SettingsMdl.h" />
+		<Unit filename="definitions.h" />
 		<Unit filename="main.cpp" />
 		<Extensions>
 			<code_completion />

@@ -230,7 +230,7 @@ Explicitly named functions tend to be less prone to programmer error and inadver
 
     object = getObject( 0 );
 
-This could be meant as a call to get a random animation, but the compiler would interpret it as a call to get one by index.
+This could be meant as a call to get a random object, but the compiler would interpret it as a call to get one by index.
 
 Overloading functions for the sake of adding ‘const’ accessible function is allowable:
 

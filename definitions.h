@@ -1,8 +1,8 @@
 /*------------------------------------------------------------------------------
-; File:          Scene.h
-; Description:   Declaration of the 3D scene loader class.
+; File:          definitions.h
+; Description:   Defines every class in the project.
 ; Author:        Miguel Angel Astor, sonofgrendel@gmail.com
-; Date created:  13/02/2014
+; Date created:  18/02/2014
 ;
 ; Copyright (C) 2014 Fundacion Museos Nacionales
 ;
@@ -20,30 +20,15 @@
 ; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ;-----------------------------------------------------------------------------*/
 
-#ifndef SCENE_H
-#define SCENE_H
+#ifndef DEFINITIONS_H
+#define DEFINITIONS_H
 
 #include <irrlicht.h>
 
-#include "definitions.h"
+class mdcApplication;
+class mdcSettingsMdl;
+class mdcSettingsDlg;
+class mdcSettingsCtrl;
+class mdcScene;
 
-using namespace irr;
-using core::stringw;
-
-class mdcScene {
-	public:
-		mdcScene( IrrlichtDevice * );
-		~mdcScene();
-
-		void changeCameraKeyMaps( SKeyMap, SKeyMap, SKeyMap, SKeyMap )                 const;
-		void addMeshToCollisionDetection( scene::IAnimatedMesh *, scene::ISceneNode *) const;
-
-	private:
-		scene::ICameraSceneNode *                        camera;
-		scene::ISceneNodeAnimatorCameraFPS *             animator;
-		scene::IMetaTriangleSelector *                   metaSelector;
-		scene::ISceneNodeAnimatorCollisionResponse *     collider;
-		scene::ISceneManager *                           smgr;
-};
-
-#endif // SCENE_H
+#endif // DEFINITIONS_H

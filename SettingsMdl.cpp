@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
-; File:          Settings.cpp
+; File:          SettingsMdl.cpp
 ; Description:   Implementation of the application settings class.
 ; Author:        Miguel Angel Astor, sonofgrendel@gmail.com
 ; Date created:  12/02/2014
@@ -29,7 +29,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
-#include "Settings.h"
+#include "SettingsMdl.h"
 
 using std::ifstream;
 using std::ofstream;
@@ -77,6 +77,7 @@ void mdcSettingsMdl::freeInstance() {
 
 		if ( instance->refs == 0 ) {
 			delete instance;
+			instance = NULL;
 		}
 	}
 }
@@ -372,13 +373,14 @@ void mdcSettingsMdl::saveSettings() const {
 		ofs << "    <setting name=\"resolution\"    value=\"" << screenDimensions->Width << "x"
 			<< screenDimensions->Height << "\">\n";
 
-		ofs << "  </video>\n"
-			"  <controls>\n"
-			"    <key name = \"forward\"  value=\"w\">\n"
-			"    <key name = \"backward\" value=\"s\">\n"
-			"    <key name = \"strafe_l\" value=\"a\">\n"
-			"    <key name = \"strafe_r\" value=\"d\">\n"
-			"  </controls>\n"
+		ofs << "  </video>\n  <controls>\n";
+
+		ofs << "    <key name = \"forward\"  value=\"" << getKeyMapKey( forward ) << "\">\n";
+		ofs << "    <key name = \"backward\" value=\"" << getKeyMapKey( backward ) << "\">\n";
+		ofs << "    <key name = \"strafe_l\" value=\"" << getKeyMapKey( s_left ) << "\">\n";
+		ofs << "    <key name = \"strafe_r\" value=\"" << getKeyMapKey( s_right ) << "\">\n";
+
+		ofs << "  </controls>\n"
 			"  <audio>\n"
 			"    <!-- Unused -->\n"
 			"    <setting name = \"volume\" value=\"1.0\">\n"
@@ -412,6 +414,53 @@ bool mdcSettingsMdl::settingsFileExists() const {
 		ifs.close();
 		return false;
 	}
+}
+
+char mdcSettingsMdl::getKeyMapKey( const SKeyMap & key ) const{
+	switch ( key.KeyCode ) {
+		case KEY_KEY_A: return 'a';
+		case KEY_KEY_B: return 'b';
+		case KEY_KEY_C: return 'c';
+		case KEY_KEY_D: return 'd';
+		case KEY_KEY_E: return 'e';
+		case KEY_KEY_F: return 'f';
+		case KEY_KEY_G: return 'g';
+		case KEY_KEY_H: return 'h';
+		case KEY_KEY_I: return 'i';
+		case KEY_KEY_J: return 'j';
+		case KEY_KEY_K: return 'k';
+		case KEY_KEY_L: return 'l';
+		case KEY_KEY_M: return 'm';
+		case KEY_KEY_N: return 'n';
+		case KEY_KEY_O: return 'o';
+		case KEY_KEY_P: return 'p';
+		case KEY_KEY_Q: return 'q';
+		case KEY_KEY_R: return 'r';
+		case KEY_KEY_S: return 's';
+		case KEY_KEY_T: return 't';
+		case KEY_KEY_U: return 'u';
+		case KEY_KEY_V: return 'v';
+		case KEY_KEY_W: return 'w';
+		case KEY_KEY_X: return 'x';
+		case KEY_KEY_Y: return 'y';
+		case KEY_KEY_Z: return 'z';
+		case KEY_KEY_0: return '0';
+		case KEY_KEY_1: return '1';
+		case KEY_KEY_2: return '2';
+		case KEY_KEY_3: return '3';
+		case KEY_KEY_4: return '4';
+		case KEY_KEY_5: return '5';
+		case KEY_KEY_6: return '6';
+		case KEY_KEY_7: return '7';
+		case KEY_KEY_8: return '8';
+		case KEY_KEY_9: return '9';
+		case KEY_UP:    return '^';
+		case KEY_LEFT:  return '<';
+		case KEY_RIGHT: return '>';
+		case KEY_DOWN:  return ',';
+		default : assert( 0 ); break;
+	}
+	return '\0';
 }
 
 void mdcSettingsMdl::setKeyMapKey( char c, SKeyMap & key ) const {

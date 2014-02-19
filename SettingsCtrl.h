@@ -1,8 +1,8 @@
 /*------------------------------------------------------------------------------
-; File:          Scene.h
-; Description:   Declaration of the 3D scene loader class.
+; File:          SettingsCtrl.h
+; Description:   Declaration of the settings controller class.
 ; Author:        Miguel Angel Astor, sonofgrendel@gmail.com
-; Date created:  13/02/2014
+; Date created:  18/02/2014
 ;
 ; Copyright (C) 2014 Fundacion Museos Nacionales
 ;
@@ -20,30 +20,27 @@
 ; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ;-----------------------------------------------------------------------------*/
 
-#ifndef SCENE_H
-#define SCENE_H
+#ifndef SETTINGSCTRL_H
+#define SETTINGSCTRL_H
 
 #include <irrlicht.h>
 
 #include "definitions.h"
+#include "SettingsMdl.h"
+#include "SettingsDlg.h"
 
-using namespace irr;
-using core::stringw;
-
-class mdcScene {
+class mdcSettingsCtrl : public irr::IEventReceiver {
 	public:
-		mdcScene( IrrlichtDevice * );
-		~mdcScene();
+		mdcSettingsCtrl( mdcApplication * );
 
-		void changeCameraKeyMaps( SKeyMap, SKeyMap, SKeyMap, SKeyMap )                 const;
-		void addMeshToCollisionDetection( scene::IAnimatedMesh *, scene::ISceneNode *) const;
+		virtual bool        OnEvent( const irr::SEvent& );
+		void                setDialog( mdcSettingsDlg * );
+		void                invalidateDialog();
 
 	private:
-		scene::ICameraSceneNode *                        camera;
-		scene::ISceneNodeAnimatorCameraFPS *             animator;
-		scene::IMetaTriangleSelector *                   metaSelector;
-		scene::ISceneNodeAnimatorCollisionResponse *     collider;
-		scene::ISceneManager *                           smgr;
+		mdcApplication *    app;
+		mdcSettingsMdl *    settings;
+		mdcSettingsDlg *    dialog;
 };
 
-#endif // SCENE_H
+#endif // SETTINGSCTRL_H

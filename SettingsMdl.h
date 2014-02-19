@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
-; File:          Settings.h
+; File:          SettingsMdl.h
 ; Description:   Declaration of the application settings class.
 ; Author:        Miguel Angel Astor, sonofgrendel@gmail.com
 ; Date created:  12/02/2014
@@ -25,6 +25,8 @@
 
 #include <string>
 #include <irrlicht.h>
+
+#include "definitions.h"
 
 using namespace irr;
 using std::string;
@@ -92,11 +94,12 @@ class mdcSettingsMdl{
 		mdcSettingsMdl &                 operator=( mdcSettingsMdl const &){ return *instance; };
 
 		// Helper methods
-		void                             createSettingsFile()          const;
+		void                             createSettingsFile()            const;
 		void                             loadSettingsFile();
-		bool                             settingsDirExists()           const;
-		bool                             settingsFileExists()          const;
-		void                             setKeyMapKey(char, SKeyMap &) const;
+		bool                             settingsDirExists()             const;
+		bool                             settingsFileExists()            const;
+		void                             setKeyMapKey( char, SKeyMap & ) const;
+		char                             getKeyMapKey( const SKeyMap & )       const;
 };
 
 #endif // SETTINGS_H

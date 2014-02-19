@@ -3,6 +3,7 @@ bin/
 media/
 lib/
 obj/
+font/
 
 # Compiled Object files
 *.slo

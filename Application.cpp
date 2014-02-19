@@ -23,6 +23,7 @@
 #include <cstdlib>
 
 #include "Application.h"
+#include "SettingsDlg.h"
 
 /*------------------------------------------------------------------------------
 ; Application::Application()
@@ -45,8 +46,7 @@ mdcApplication::mdcApplication(){
 
 	device = createDeviceEx(params);
 
-	if( device == NULL )
-		return;
+	if( device == NULL ) return;
 
 	device->setWindowCaption( L"Museo de Ciencias :: " );
 	device->getCursorControl()->setVisible( false );
@@ -56,14 +56,23 @@ mdcApplication::mdcApplication(){
 	smgr   = device->getSceneManager();
 	guienv = device->getGUIEnvironment();
 
-	scene = new mdcScene(device);
+	scene = new mdcScene( device );
 
 	const SKeyMap * f  = settings->getForwardKey();
 	const SKeyMap * b  = settings->getBackwardKey();
 	const SKeyMap * sl = settings->getStrafeLeftKey();
 	const SKeyMap * sr = settings->getStrafeRightKey();
 
-	scene->changeCameraKeyMaps(*f, *b, *sl, *sr);
+	scene->changeCameraKeyMaps( *f, *b, *sl, *sr );
+
+	gui::IGUISkin* skin = guienv->getSkin();
+	gui::IGUIFont* font = guienv->getFont("font/fontcourier.bmp");
+	if ( font )
+		skin->setFont(font);
+
+	settingsCtrl = new mdcSettingsCtrl( this );
+
+	settingsVisible = false;
 
 	lastFPS = -1;
 }
@@ -74,12 +83,10 @@ mdcApplication::mdcApplication(){
 ; Application destructor. Releases all the objects used by the application.
 ;-----------------------------------------------------------------------------*/
 mdcApplication::~mdcApplication(){
-	// Delete all objects created by the engine.
 	if(device != NULL)
 		device->drop();
 
-	if ( settings->settingsChanged() )
-		settings->saveSettings();
+	if ( settings->settingsChanged() ) settings->saveSettings();
 
 	settings->freeInstance();
 	delete scene;
@@ -101,11 +108,12 @@ void mdcApplication::run(){
 			if( device->isWindowActive() ){
 				driver->beginScene( true, true, video::SColor( 255, 97, 220, 220 ) );
 				smgr->drawAll();
+				guienv->drawAll();
 				driver->endScene();
 
 				fps = driver->getFPS();
 
-				if( settings->isFullScreen() && lastFPS != fps ){
+				if( !settings->isFullScreen() && lastFPS != fps ){
 					str = L"Museo de Ciencias :: [";
 					str += driver->getName();
 					str += "] FPS:";
@@ -124,12 +132,35 @@ void mdcApplication::run(){
 ; Captures events sent by irrLicht Engine. Right now it only listens for the
 ; escape key and stops the engine when it is pressed.
 ;-----------------------------------------------------------------------------*/
-bool mdcApplication::OnEvent( const SEvent& event ){
-	if( event.EventType == irr::EET_KEY_INPUT_EVENT ){
-		if( event.KeyInput.Key == irr::KEY_ESCAPE && event.KeyInput.PressedDown ){
+bool mdcApplication::OnEvent( const SEvent& event ) {
+	if ( event.EventType == irr::EET_KEY_INPUT_EVENT ) {
+		if ( event.KeyInput.Key == irr::KEY_ESCAPE && event.KeyInput.PressedDown ) {
 			device->closeDevice();
+			return true;
+
+		} else if ( event.KeyInput.Key == irr::KEY_F1 && event.KeyInput.PressedDown ) {
+			if ( !settingsVisible ) {
+				settingsVisible = true;
+				device->getCursorControl()->setVisible( true );
+				settingsCtrl->setDialog( new mdcSettingsDlg( guienv ) );
+				device->setEventReceiver( settingsCtrl );
+			}
 			return true;
 		}
 	}
 	return false;
+}
+
+void mdcApplication::onSettingsDialogHidden() {
+	settingsVisible = false;
+
+	const SKeyMap * f  = settings->getForwardKey();
+	const SKeyMap * b  = settings->getBackwardKey();
+	const SKeyMap * sl = settings->getStrafeLeftKey();
+	const SKeyMap * sr = settings->getStrafeRightKey();
+
+	scene->changeCameraKeyMaps( *f, *b, *sl, *sr );
+
+	device->getCursorControl()->setVisible( false );
+	device->setEventReceiver( this );
 }
