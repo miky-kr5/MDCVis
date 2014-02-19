@@ -48,10 +48,10 @@ class mdcSettingsMdl{
 		u32                              getScreenWidth()        const;
 		u32                              getScreenHeight()       const;
 		const core::dimension2d<u32> *   getScreenDimensions()   const;
-		const SKeyMap *                  getForwardKey()         const;
-		const SKeyMap *                  getBackwardKey()        const;
-		const SKeyMap *                  getStrafeLeftKey()      const;
-		const SKeyMap *                  getStrafeRightKey()     const;
+		const SKeyMap                *   getForwardKey()         const;
+		const SKeyMap                *   getBackwardKey()        const;
+		const SKeyMap                *   getStrafeLeftKey()      const;
+		const SKeyMap                *   getStrafeRightKey()     const;
 
 		// Setters
 		void                             setFullScreen( bool );

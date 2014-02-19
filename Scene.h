@@ -39,11 +39,11 @@ class mdcScene {
 		void addMeshToCollisionDetection( scene::IAnimatedMesh *, scene::ISceneNode *) const;
 
 	private:
-		scene::ICameraSceneNode *                        camera;
-		scene::ISceneNodeAnimatorCameraFPS *             animator;
-		scene::IMetaTriangleSelector *                   metaSelector;
+		scene::ICameraSceneNode                    *     camera;
+		scene::ISceneNodeAnimatorCameraFPS         *     animator;
+		scene::IMetaTriangleSelector               *     metaSelector;
 		scene::ISceneNodeAnimatorCollisionResponse *     collider;
-		scene::ISceneManager *                           smgr;
+		scene::ISceneManager                       *     smgr;
 };
 
 #endif // SCENE_H
