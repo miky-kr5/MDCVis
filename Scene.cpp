@@ -22,8 +22,6 @@
 
 #include "Scene.h"
 
-#define START_POSITION       -0.9, 110,  1649
-#define LOOK_AT               0,   110, -1
 #define FAR_UNITS             50000.0f
 #define CAMERA_ROTATE_SPEED   100.0f
 #define MOVEMENT_SPEED        0.5f
@@ -34,9 +32,11 @@ mdcScene::mdcScene( IrrlichtDevice * device ) {
 	// Section names
 	const stringw sceneTag         ( L"scene" );
 	const stringw skyTag           ( L"skybox" );
+	const stringw camTag           ( L"camera" );
 	// Data tags
 	const stringw modelTag         ( L"model" );
 	const stringw sideTag          ( L"side" );
+	const stringw vectTag          ( L"vector" );
 	const stringw sTrue            ( L"1" );
 	// Skybox sides;
 	const stringw top              ( L"top" );
@@ -45,6 +45,9 @@ mdcScene::mdcScene( IrrlichtDevice * device ) {
 	const stringw back             ( L"back" );
 	const stringw left             ( L"left" );
 	const stringw right            ( L"right" );
+	// Camera data
+	const stringw camStart         ( L"start" );
+	const stringw lookAt           ( L"look_at" );
 
 	// Scene model and collision data.
 	SKeyMap                                   keyMap[4];
@@ -52,6 +55,9 @@ mdcScene::mdcScene( IrrlichtDevice * device ) {
 	scene::IAnimatedMesh *                    mesh;
 	scene::ISceneNode *                       node;
 	scene::ITriangleSelector *                mapSelector;
+
+	// Camera positions.
+	float sx, sy, sz, lx, ly, lz;
 
 	// Possible scene object flags.
 	bool solid;
@@ -96,23 +102,6 @@ mdcScene::mdcScene( IrrlichtDevice * device ) {
 	// Disable mipmap generation.
 	driver->setTextureCreationFlag( video::ETCF_CREATE_MIP_MAPS, false );
 
-	// Create the camera.
-	camera = smgr->addCameraSceneNodeFPS( NULL, CAMERA_ROTATE_SPEED, MOVEMENT_SPEED, -1, keyMap, 4 );
-	camera->setPosition( core::vector3df( START_POSITION ) );
-	camera->setTarget( core::vector3df( LOOK_AT ) );
-	camera->setFarValue( FAR_UNITS );
-
-	// Get the camera animator to disable vertical movement.
-	// This animator will allow to change key mappings in other parts of the program.
-	camAnimators = camera->getAnimators();
-	core::list<scene::ISceneNodeAnimator*>::ConstIterator i = camAnimators.begin();
-	for( ; i != camAnimators.end(); i++ ){
-		scene::ISceneNodeAnimator * tempAnimator = *i;
-		if( tempAnimator->getType() == scene::ESNAT_CAMERA_FPS ){
-			( animator = static_cast< scene::ISceneNodeAnimatorCameraFPS * >( tempAnimator ) )->setVerticalMovement( false );
-		}
-	}
-
 	// Create the metaSelector used for collision detection.
 	metaSelector = smgr->createMetaTriangleSelector();
 
@@ -129,6 +118,8 @@ mdcScene::mdcScene( IrrlichtDevice * device ) {
 					} else if ( skyTag.equals_ignore_case( xml->getNodeName() ) ) {
 						currentSection = skyTag;
 
+					} else if ( camTag.equals_ignore_case( xml->getNodeName() ) ){
+						currentSection = camTag;
 					}
 
 				} else if ( currentSection.equals_ignore_case( sceneTag ) && modelTag.equals_ignore_case( xml->getNodeName() ) ) {
@@ -199,6 +190,30 @@ mdcScene::mdcScene( IrrlichtDevice * device ) {
 							rightTex = xml->getAttributeValueSafe( L"texture" );
 						}
 					}
+				} else if ( currentSection.equals_ignore_case( camTag ) && vectTag.equals_ignore_case( xml->getNodeName() ) ){
+					// If we are in the camera section then load start and look at positions.
+					key = xml->getAttributeValueSafe( L"name" );
+
+					if ( !key.empty() ) {
+						if ( key.equals_ignore_case( camStart ) ) {
+							core::stringc x = xml->getAttributeValueSafe( L"x" );
+							core::stringc y = xml->getAttributeValueSafe( L"y" );
+							core::stringc z = xml->getAttributeValueSafe( L"z" );
+
+							sx = core::fast_atof( x.c_str() );
+							sy = core::fast_atof( y.c_str() );
+							sz = core::fast_atof( z.c_str() );
+
+						} else if ( key.equals_ignore_case( lookAt ) ){
+							core::stringc x = xml->getAttributeValueSafe( L"x" );
+							core::stringc y = xml->getAttributeValueSafe( L"y" );
+							core::stringc z = xml->getAttributeValueSafe( L"z" );
+
+							lx = core::fast_atof( x.c_str() );
+							ly = core::fast_atof( y.c_str() );
+							lz = core::fast_atof( z.c_str() );
+						}
+					}
 				}
 			}
 			break;
@@ -220,6 +235,23 @@ mdcScene::mdcScene( IrrlichtDevice * device ) {
 							  driver->getTexture( rightTex ),
 							  driver->getTexture( frontTex ),
 							  driver->getTexture( backTex ) );
+
+	// Create the camera.
+	camera = smgr->addCameraSceneNodeFPS( NULL, CAMERA_ROTATE_SPEED, MOVEMENT_SPEED, -1, keyMap, 4 );
+	camera->setPosition( core::vector3df( sx, sy, sz ) );
+	camera->setTarget( core::vector3df( lx, ly, lz ) );
+	camera->setFarValue( FAR_UNITS );
+
+	// Get the camera animator to disable vertical movement.
+	// This animator will allow to change key mappings in other parts of the program.
+	camAnimators = camera->getAnimators();
+	core::list<scene::ISceneNodeAnimator*>::ConstIterator i = camAnimators.begin();
+	for( ; i != camAnimators.end(); i++ ){
+		scene::ISceneNodeAnimator * tempAnimator = *i;
+		if( tempAnimator->getType() == scene::ESNAT_CAMERA_FPS ){
+			( animator = static_cast< scene::ISceneNodeAnimatorCameraFPS * >( tempAnimator ) )->setVerticalMovement( false );
+		}
+	}
 
 	// Create the collision detector and add it to the camera.
 	collider = smgr->createCollisionResponseAnimator( metaSelector,

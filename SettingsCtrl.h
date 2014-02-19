@@ -35,12 +35,13 @@ class mdcSettingsCtrl : public irr::IEventReceiver {
 
 		virtual bool        OnEvent( const irr::SEvent& );
 		void                setDialog( mdcSettingsDlg * );
-		void                invalidateDialog();
 
 	private:
 		mdcApplication *    app;
 		mdcSettingsMdl *    settings;
 		mdcSettingsDlg *    dialog;
+
+		void                invalidateDialog();
 };
 
 #endif // SETTINGSCTRL_H
