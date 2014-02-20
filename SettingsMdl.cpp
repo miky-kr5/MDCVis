@@ -2,7 +2,7 @@
 ; File:          SettingsMdl.cpp
 ; Description:   Implementation of the application settings class.
 ; Author:        Miguel Angel Astor, sonofgrendel@gmail.com
-; Date created:  12/02/2014
+; Date created:  2/12/2014
 ;
 ; Copyright (C) 2014 Fundacion Museos Nacionales
 ;

@@ -2,7 +2,7 @@
 ; File:          Scene.cpp
 ; Description:   Implementation of the 3D scene loader class.
 ; Author:        Miguel Angel Astor, sonofgrendel@gmail.com
-; Date created:  13/02/2014
+; Date created:  2/13/2014
 ;
 ; Copyright (C) 2014 Fundacion Museos Nacionales
 ;

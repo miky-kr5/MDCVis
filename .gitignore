@@ -1,6 +1,7 @@
 # Directories
 bin/
 media/
+include/
 lib/
 obj/
 

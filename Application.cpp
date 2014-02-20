@@ -74,6 +74,8 @@ mdcApplication::mdcApplication(){
 
 	settingsVisible = false;
 
+	exhibits = mdcExhibitMdl::getInstance();
+
 	lastFPS = -1;
 }
 
@@ -89,6 +91,8 @@ mdcApplication::~mdcApplication(){
 	if ( settings->settingsChanged() ) settings->saveSettings();
 
 	settings->freeInstance();
+	exhibits->freeInstance();
+
 	delete scene;
 }
 

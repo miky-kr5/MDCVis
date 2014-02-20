@@ -2,7 +2,7 @@
 ; File:          SettingsDlg.cpp
 ; Description:   Implementation of the settings configuration dialog class.
 ; Author:        Miguel Angel Astor, sonofgrendel@gmail.com
-; Date created:  18/02/2014
+; Date created:  2/18/2014
 ;
 ; Copyright (C) 2014 Fundacion Museos Nacionales
 ;

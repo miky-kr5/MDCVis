@@ -20,14 +20,16 @@
 				<Compiler>
 					<Add option="-Wall" />
 					<Add option="-g" />
-					<Add option="-D _DEBUG" />
+					<Add option="-D_DEBUG" />
 					<Add directory="../include" />
 					<Add directory="/usr/X11R6/include" />
+					<Add directory="include" />
 				</Compiler>
 				<Linker>
-					<Add option="-lIrrlicht -lGL -lXxf86vm -lXext -lX11 -lXcursor" />
+					<Add option="-lIrrlicht -lGL -lXxf86vm -lXext -lX11 -lXcursor -lsqlite3 -lpthread -ldl" />
 					<Add directory="../lib/Linux" />
 					<Add directory="/usr/x11R6/lib" />
+					<Add directory="lib" />
 				</Linker>
 			</Target>
 			<Target title="Release">
@@ -44,12 +46,14 @@
 					<Add option="-ffast-math" />
 					<Add directory="../include" />
 					<Add directory="/usr/X11R6/include" />
+					<Add directory="include" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
-					<Add option="-lIrrlicht -lGL -lXxf86vm -lXext -lX11 -lXcursor" />
+					<Add option="-lIrrlicht -lGL -lXxf86vm -lXext -lX11 -lXcursor -lsqlite3 -lpthread -ldl" />
 					<Add directory="../lib/Linux" />
 					<Add directory="/usr/x11R6/lib" />
+					<Add directory="lib" />
 				</Linker>
 			</Target>
 		</Build>
@@ -59,6 +63,8 @@
 		</Compiler>
 		<Unit filename="Application.cpp" />
 		<Unit filename="Application.h" />
+		<Unit filename="ExhibitMdl.cpp" />
+		<Unit filename="ExhibitMdl.h" />
 		<Unit filename="Scene.cpp" />
 		<Unit filename="Scene.h" />
 		<Unit filename="SettingsCtrl.cpp" />

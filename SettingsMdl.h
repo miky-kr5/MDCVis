@@ -2,7 +2,7 @@
 ; File:          SettingsMdl.h
 ; Description:   Declaration of the application settings class.
 ; Author:        Miguel Angel Astor, sonofgrendel@gmail.com
-; Date created:  12/02/2014
+; Date created:  2/12/2014
 ;
 ; Copyright (C) 2014 Fundacion Museos Nacionales
 ;
@@ -91,7 +91,7 @@ class mdcSettingsMdl{
 		mdcSettingsMdl( );
 		mdcSettingsMdl( mdcSettingsMdl const & ){ };
 		~mdcSettingsMdl( );
-		mdcSettingsMdl &                 operator=( mdcSettingsMdl const &){ return *instance; };
+		mdcSettingsMdl &                 operator=( mdcSettingsMdl const & ){ return *instance; };
 
 		// Helper methods
 		void                             createSettingsFile()            const;
