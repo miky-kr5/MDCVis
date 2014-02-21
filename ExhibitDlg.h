@@ -35,10 +35,13 @@ enum EXDLG_GUI_ELEMENT_IDS {
 class mdcExhibitDlg {
 	public:
 	mdcExhibitDlg( irr::gui::IGUIEnvironment *, int );
+	~mdcExhibitDlg();
+
 	void                          closeWindow() const;
 
 	private:
-		irr::gui::IGUIWindow *    windowSettings;
+		mdcExhibitMdl *           model;
+		irr::gui::IGUIWindow *    win;
 };
 
 #endif // EXHIBITDLG_H

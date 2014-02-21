@@ -67,7 +67,7 @@ class mdcExhibitMdl{
 		mdcExhibitMdl();
 		mdcExhibitMdl( mdcExhibitMdl const & ) { };
 		~mdcExhibitMdl();
-		mdcExhibitMdl & operator=(mdcExhibitMdl const &) { return *instance; }
+		mdcExhibitMdl & operator=( mdcExhibitMdl const & ) { return *instance; }
 };
 
 #endif

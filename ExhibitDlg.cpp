@@ -1,6 +1,6 @@
 /*------------------------------------------------------------------------------
-; File:          ExhibitDlg.h
-; Description:   Declaration of the exhibit dialog class.
+; File:          ExhibitDlg.cpp
+; Description:   Implementation of the exhibit dialog class.
 ; Author:        Miguel Angel Astor, sonofgrendel@gmail.com
 ; Date created:  2/21/2014
 ;
@@ -22,10 +22,15 @@
 
 #include "ExhibitDlg.h"
 
-mdcExhibitDlg::mdcExhibitDlg( irr::gui::IGUIEnvironment * gui, int exId){
+mdcExhibitDlg::mdcExhibitDlg( irr::gui::IGUIEnvironment * gui, int exId ){
+	model = mdcExhibitMdl::getInstance();
+}
 
+
+mdcExhibitDlg::~mdcExhibitDlg() {
+	mdcExhibitMdl::freeInstance();
 }
 
 void mdcExhibitDlg::closeWindow() const{
-
+	win->remove();
 }

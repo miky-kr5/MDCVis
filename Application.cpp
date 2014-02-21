@@ -22,6 +22,7 @@
 
 #include <iostream>
 #include <cstdlib>
+#include <cassert>
 
 #include "Application.h"
 #include "SettingsDlg.h"
@@ -77,6 +78,10 @@ mdcApplication::mdcApplication(){
 		loadingScreen->setImage( driver->getTexture( "gfx/loading1280x800.png" ) );
 	} else if( w == 1280 && h == 1024 ) {
 		loadingScreen->setImage( driver->getTexture( "gfx/loading1280x1024.png" ) );
+	} else {
+		// The screen resolution is unrecognized.
+		device->closeDevice();
+		assert( 0 );
 	}
 
 	// Set up the gui font and create the dialog listeners.
@@ -104,8 +109,8 @@ mdcApplication::~mdcApplication(){
 
 	if ( settings->settingsChanged() ) settings->saveSettings();
 
-	settings->freeInstance();
-	exhibits->freeInstance();
+	mdcSettingsMdl::freeInstance();
+	mdcExhibitMdl::freeInstance();
 	delete settingsCtrl;
 	delete scene;
 }
