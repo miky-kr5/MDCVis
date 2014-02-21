@@ -53,6 +53,7 @@ class mdcApplication : public IEventReceiver {
 		scene::ISceneManager *      smgr;
 		gui::IGUIEnvironment *      guienv;
 
+		gui::IGUIImage       *      loadingScreen;
 		mdcSettingsMdl       *      settings;
 		mdcSettingsCtrl      *      settingsCtrl;
 		mdcScene             *      scene;
@@ -60,6 +61,8 @@ class mdcApplication : public IEventReceiver {
 
 		int                         lastFPS;
 		bool                        settingsVisible;
+
+		void                        loadScene();
 };
 
 #endif // APPLICATION_H

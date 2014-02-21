@@ -93,7 +93,6 @@ int mdcSettingsDlg::h = -1;
 mdcSettingsDlg::mdcSettingsDlg( gui::IGUIEnvironment * env){
 	model = mdcSettingsMdl::getInstance();
 
-	// TODO: Fix this little block.
 	if ( w == -1 && h == -1) {
 		w = model->getScreenWidth() / 2;
 		h = model->getScreenHeight() / 2;

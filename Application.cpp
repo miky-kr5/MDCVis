@@ -35,6 +35,8 @@ static const char * DB_FILENAME = "exhibits/mdc.db";
 ; parameters for the irrLicht Engine.
 ;-----------------------------------------------------------------------------*/
 mdcApplication::mdcApplication(){
+	int w, h;
+
 	settings = mdcSettingsMdl::getInstance();
 
 	SIrrlichtCreationParameters params = SIrrlichtCreationParameters();
@@ -53,34 +55,39 @@ mdcApplication::mdcApplication(){
 
 	device->setWindowCaption( L"Museo de Ciencias :: " );
 	device->getCursorControl()->setVisible( false );
+	device->setResizable( false );
 
 	// Get pointers to the engine objects to avoid calling the getters at a later time.
 	driver = device->getVideoDriver();
 	smgr   = device->getSceneManager();
 	guienv = device->getGUIEnvironment();
 
-	scene = new mdcScene( device );
+	// Create the loading screen.
+	w = settings->getScreenWidth();
+	h = settings->getScreenHeight();
+	loadingScreen = guienv->addImage( core::rect<s32>( 0, 0, w, h ), NULL, 0xABCD );
+	if ( w == 640 && h == 480 ) {
+		loadingScreen->setImage( driver->getTexture( "gfx/loading640x480.png" ) );
+	} else if( w == 800 && h == 600 ) {
+		loadingScreen->setImage( driver->getTexture( "gfx/loading800x600.png" ) );
+	} else if( w == 1024 && h == 768 ) {
+		loadingScreen->setImage( driver->getTexture( "gfx/loading1024x768.png" ) );
+	} else if( w == 1280 && h == 800 ) {
+		loadingScreen->setImage( driver->getTexture( "gfx/loading1280x800.png" ) );
+	} else if( w == 1280 && h == 1024 ) {
+		loadingScreen->setImage( driver->getTexture( "gfx/loading1280x1024.png" ) );
+	}
 
-	const SKeyMap * f  = settings->getForwardKey();
-	const SKeyMap * b  = settings->getBackwardKey();
-	const SKeyMap * sl = settings->getStrafeLeftKey();
-	const SKeyMap * sr = settings->getStrafeRightKey();
-
-	scene->changeCameraKeyMaps( *f, *b, *sl, *sr );
-
+	// Set up the gui font and create the dialog listeners.
 	gui::IGUISkin* skin = guienv->getSkin();
 	gui::IGUIFont* font = guienv->getFont("font/fontcourier.bmp");
 	if ( font )
 		skin->setFont(font);
-
 	settingsCtrl = new mdcSettingsCtrl( this );
-
 	settingsVisible = false;
 
-	exhibits = mdcExhibitMdl::getInstance();
-	if ( !exhibits->setDatabaseFile( DB_FILENAME ) ) {
-		std::cerr << "The exhibits database could not be opened." << std::endl;
-	}
+	// Set scene to NULL so that it will be loaded after the first render.
+	scene = NULL;
 
 	lastFPS = -1;
 }
@@ -100,6 +107,22 @@ mdcApplication::~mdcApplication(){
 	exhibits->freeInstance();
 	delete settingsCtrl;
 	delete scene;
+}
+
+void mdcApplication::loadScene(){
+	scene = new mdcScene( device );
+
+	const SKeyMap * f  = settings->getForwardKey();
+	const SKeyMap * b  = settings->getBackwardKey();
+	const SKeyMap * sl = settings->getStrafeLeftKey();
+	const SKeyMap * sr = settings->getStrafeRightKey();
+
+	scene->changeCameraKeyMaps( *f, *b, *sl, *sr );
+
+	exhibits = mdcExhibitMdl::getInstance();
+	if ( !exhibits->setDatabaseFile( DB_FILENAME ) ) {
+		std::cerr << "The exhibits database could not be opened." << std::endl;
+	}
 }
 
 /*------------------------------------------------------------------------------
@@ -131,6 +154,12 @@ void mdcApplication::run(){
 					device->setWindowCaption( str.c_str() );
 					lastFPS = fps;
 				}
+
+				if ( scene == NULL ){
+					loadScene();
+					loadingScreen->remove();
+				}
+
 			}else device->yield();
 		}
 	}
