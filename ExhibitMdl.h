@@ -24,56 +24,50 @@
 
 #include <string>
 
+#include "definitions.h"
+
 #define BAD_VALUE -1
 
 using std::string;
 
-typedef struct sqlite3 sqlite3;
-
-typedef struct VEC_3 {
-  float x;
-  float y;
-  float z;
-} vec3_t;
-
 class mdcExhibitMdl{
- public:
-  static mdcExhibitMdl *    getInstance();
-  static void               freeInstance();
+	public:
+		static mdcExhibitMdl *    getInstance();
+		static void               freeInstance();
 
-  // Database management.
-  bool                      setDatabaseFile( char * );
-  bool                      releaseDatabase();
+		// Database management.
+		bool                      setDatabaseFile( const char * );
+		bool                      releaseDatabase();
 
-  // Different methods to get row ids.
-  int                       getNumOfExhibits();
-  int                       getFirstNExhibitIds( int *, int );
-  int                       getExhibitsIdsRange( int *, int, int );
+		// Different methods to get row ids.
+		int                       getNumOfExhibits();
+		int                       getFirstNExhibitIds( int *, int );
+		int                       getExhibitsIdsRange( int *, int, int );
 
-  // Text getters.
-  void                      getExhibitTitleById( char**, int );
-  void                      getExhibitDescriptionById( char**, int );
-  void                      getExhibitModelPathById( char**, int );
-  void                      getExhibitPhotoPathById( char**, int );
+		// Text getters.
+		void                      getExhibitTitleById( char**, int );
+		void                      getExhibitDescriptionById( char**, int );
+		void                      getExhibitModelPathById( char**, int );
+		void                      getExhibitPhotoPathById( char**, int );
 
-  // Geometric transformation getters.
-  void                      getTranslationById( vec3_t &, int );
-  void                      getRotationById( vec3_t &, int );
-  float                     getRotationAmountById( int );
-  void                      getScalingById( vec3_t &, int );
+		// Geometric transformation getters.
+		void                      getTranslationById( vec3_t &, int );
+		void                      getRotationById( vec3_t &, int );
+		float                     getRotationAmountById( int );
+		void                      getScalingById( vec3_t &, int );
 
- private:
-  static mdcExhibitMdl *    instance;
-  sqlite3              *    db;
+	private:
+		static mdcExhibitMdl *    instance;
+		sqlite3              *    db;
 
-  int                       refs;
-  bool                      dbUsable;
+		int                       refs;
+		bool                      dbUsable;
 
-  // Private for the singleton pattern.
-  mdcExhibitMdl();
-  mdcExhibitMdl( mdcExhibitMdl const & ) { };
-  ~mdcExhibitMdl();
-  mdcExhibitMdl & operator=(mdcExhibitMdl const &) { return *instance; }
+		// Private for the singleton pattern.
+		mdcExhibitMdl();
+		mdcExhibitMdl( mdcExhibitMdl const & ) { };
+		~mdcExhibitMdl();
+		mdcExhibitMdl & operator=(mdcExhibitMdl const &) { return *instance; }
 };
 
 #endif

@@ -1,6 +1,6 @@
 /*------------------------------------------------------------------------------
 ; File:          definitions.h
-; Description:   Defines every class in the project.
+; Description:   Defines every class and struct in the project.
 ; Author:        Miguel Angel Astor, sonofgrendel@gmail.com
 ; Date created:  2/18/2014
 ;
@@ -31,5 +31,9 @@ class mdcSettingsDlg;
 class mdcSettingsCtrl;
 class mdcScene;
 class mdcExhibitMdl;
+class mdcExhibitDlg;
+
+typedef struct sqlite3 sqlite3;
+typedef struct VEC_3 vec3_t;
 
 #endif // DEFINITIONS_H

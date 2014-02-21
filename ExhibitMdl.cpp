@@ -31,6 +31,12 @@ using std::cout;
 using std::cerr;
 using std::endl;
 
+typedef struct VEC_3 {
+  float x;
+  float y;
+  float z;
+} vec3_t;
+
 void swap( int &, int & );
 
 mdcExhibitMdl * mdcExhibitMdl::instance = NULL;
@@ -58,7 +64,7 @@ mdcExhibitMdl::mdcExhibitMdl(): db(NULL), refs(0) { }
 
 mdcExhibitMdl::~mdcExhibitMdl() { }
 
-bool mdcExhibitMdl::setDatabaseFile( char * file ){
+bool mdcExhibitMdl::setDatabaseFile( const char * file ){
   int rc;
 
   rc = sqlite3_open_v2( file, &db, SQLITE_OPEN_READONLY, NULL );

@@ -20,10 +20,13 @@
 ; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ;-----------------------------------------------------------------------------*/
 
+#include <iostream>
 #include <cstdlib>
 
 #include "Application.h"
 #include "SettingsDlg.h"
+
+const char * DB_FILENAME = "exhibits/mdc.db";
 
 /*------------------------------------------------------------------------------
 ; Application::Application()
@@ -75,6 +78,9 @@ mdcApplication::mdcApplication(){
 	settingsVisible = false;
 
 	exhibits = mdcExhibitMdl::getInstance();
+	if ( !exhibits->setDatabaseFile( DB_FILENAME ) ) {
+		std::cerr << "The exhibits database could not be opened." << std::endl;
+	}
 
 	lastFPS = -1;
 }
@@ -92,7 +98,7 @@ mdcApplication::~mdcApplication(){
 
 	settings->freeInstance();
 	exhibits->freeInstance();
-
+	delete settingsCtrl;
 	delete scene;
 }
 
