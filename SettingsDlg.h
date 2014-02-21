@@ -30,7 +30,7 @@
 
 using namespace irr;
 
-enum ELEMENT_IDS {
+enum SETNG_GUI_ELEMENT_IDS {
 	AA_COMB = 0x1000,
 	RES_COMB,
 	FS_CHECK,

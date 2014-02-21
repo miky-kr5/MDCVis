@@ -63,6 +63,8 @@
 		</Compiler>
 		<Unit filename="Application.cpp" />
 		<Unit filename="Application.h" />
+		<Unit filename="ExhibitDlg.cpp" />
+		<Unit filename="ExhibitDlg.h" />
 		<Unit filename="ExhibitMdl.cpp" />
 		<Unit filename="ExhibitMdl.h" />
 		<Unit filename="Scene.cpp" />

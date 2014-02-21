@@ -1,8 +1,8 @@
 /*------------------------------------------------------------------------------
-; File:          definitions.h
-; Description:   Defines every class and struct in the project.
+; File:          ExhibitDlg.h
+; Description:   Declaration of the exhibit dialog class.
 ; Author:        Miguel Angel Astor, sonofgrendel@gmail.com
-; Date created:  2/18/2014
+; Date created:  2/21/2014
 ;
 ; Copyright (C) 2014 Fundacion Museos Nacionales
 ;
@@ -20,26 +20,12 @@
 ; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ;-----------------------------------------------------------------------------*/
 
-#ifndef DEFINITIONS_H
-#define DEFINITIONS_H
+#include "ExhibitDlg.h"
 
-#include <irrlicht.h>
+mdcExhibitDlg::mdcExhibitDlg( irr::gui::IGUIEnvironment * gui, int exId){
 
-#define SPA
+}
 
-#ifndef SPA
-#define ENG
-#endif
+void mdcExhibitDlg::closeWindow() const{
 
-class mdcApplication;
-class mdcSettingsMdl;
-class mdcSettingsDlg;
-class mdcSettingsCtrl;
-class mdcScene;
-class mdcExhibitMdl;
-class mdcExhibitDlg;
-
-typedef struct sqlite3 sqlite3;
-typedef struct VEC_3 vec3_t;
-
-#endif // DEFINITIONS_H
+}

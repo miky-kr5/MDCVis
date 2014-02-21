@@ -25,6 +25,7 @@
 
 #include "Application.h"
 #include "SettingsDlg.h"
+#include "ExhibitDlg.h"
 
 static const char * DB_FILENAME = "exhibits/mdc.db";
 

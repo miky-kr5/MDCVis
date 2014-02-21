@@ -26,12 +26,6 @@
 
 using core::stringw;
 
-#define SPA
-
-#ifndef SPA
-#define ENG
-#endif
-
 #if defined( SPA )
 static const stringw WIN_TITLE = L"Configuración";
 static const stringw VIDEO_SET = L"Configuración del video";
