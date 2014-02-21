@@ -52,6 +52,9 @@ class mdcSettingsDlg {
 		char                   getKeyMap( EKEY_ACTION )  const;
 
 	private:
+		static int             w;
+		static int             h;
+
 		mdcSettingsMdl    *    model;
 		gui::IGUIWindow   *    windowSettings;
 		gui::IGUIButton   *    buttonSave;

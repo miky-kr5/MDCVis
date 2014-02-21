@@ -26,7 +26,7 @@
 #include "Application.h"
 #include "SettingsDlg.h"
 
-const char * DB_FILENAME = "exhibits/mdc.db";
+static const char * DB_FILENAME = "exhibits/mdc.db";
 
 /*------------------------------------------------------------------------------
 ; Application::Application()

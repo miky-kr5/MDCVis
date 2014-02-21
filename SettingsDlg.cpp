@@ -87,13 +87,17 @@ static const stringw VID_NOTE  = L"NOTA: Changes to video need restart";
 static void setKeyMapComboBoxItems( gui::IGUIComboBox * );
 static void setKeyMapComboBoxSelected( gui::IGUIComboBox *, mdcSettingsMdl *, enum EKEY_ACTION );
 
+int mdcSettingsDlg::w = -1;
+int mdcSettingsDlg::h = -1;
+
 mdcSettingsDlg::mdcSettingsDlg( gui::IGUIEnvironment * env){
-	int sw, sh;
 	model = mdcSettingsMdl::getInstance();
 
 	// TODO: Fix this little block.
-	sw = model->getScreenWidth() / 2;
-	sh = model->getScreenHeight() / 2;
+	if ( w == -1 && h == -1) {
+		w = model->getScreenWidth() / 2;
+		h = model->getScreenHeight() / 2;
+	}
 
     for ( s32 i=0; i < gui::EGDC_COUNT ; ++i ) {
         video::SColor col = env->getSkin()->getColor( ( gui::EGUI_DEFAULT_COLOR )i );
@@ -101,7 +105,7 @@ mdcSettingsDlg::mdcSettingsDlg( gui::IGUIEnvironment * env){
         env->getSkin()->setColor( ( irr::gui::EGUI_DEFAULT_COLOR )i, col );
     }
 
-    windowSettings = env->addWindow( core::rect<s32>( sw - 200, sh - 200, sw + 200, sh + 200 ), true, WIN_TITLE.c_str() );
+    windowSettings = env->addWindow( core::rect<s32>( w - 200, h - 200, w + 200, h + 200 ), true, WIN_TITLE.c_str() );
 	windowSettings->setDraggable( false );
 
     env->addStaticText ( VIDEO_SET.c_str() , core::rect< s32 >( 10, 25, 200, 45), false, true, windowSettings );
