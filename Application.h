@@ -30,6 +30,7 @@
 #include "SettingsCtrl.h"
 #include "Scene.h"
 #include "ExhibitMdl.h"
+#include "ExhibitDlg.h"
 
 using namespace irr;
 
@@ -58,9 +59,10 @@ class mdcApplication : public IEventReceiver {
 		mdcSettingsCtrl      *      settingsCtrl;
 		mdcScene             *      scene;
 		mdcExhibitMdl        *      exhibits;
+		mdcExhibitDlg        *      exDlg;
 
 		int                         lastFPS;
-		bool                        settingsVisible;
+		bool                        dlgVisible;
 
 		void                        loadScene();
 };

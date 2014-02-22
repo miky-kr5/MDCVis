@@ -26,7 +26,6 @@
 
 #include "Application.h"
 #include "SettingsDlg.h"
-#include "ExhibitDlg.h"
 
 static const char * DB_FILENAME = "exhibits/mdc.db";
 
@@ -90,10 +89,11 @@ mdcApplication::mdcApplication(){
 	if ( font )
 		skin->setFont(font);
 	settingsCtrl = new mdcSettingsCtrl( this );
-	settingsVisible = false;
+	dlgVisible = false;
 
 	// Set scene to NULL so that it will be loaded after the first render.
 	scene = NULL;
+	exDlg = NULL;
 
 	lastFPS = -1;
 }
@@ -184,20 +184,37 @@ bool mdcApplication::OnEvent( const SEvent& event ) {
 			return true;
 
 		} else if ( event.KeyInput.Key == irr::KEY_F1 && event.KeyInput.PressedDown ) {
-			if ( !settingsVisible ) {
-				settingsVisible = true;
+			if ( !dlgVisible ) {
+				dlgVisible = true;
 				device->getCursorControl()->setVisible( true );
 				settingsCtrl->setDialog( new mdcSettingsDlg( guienv ) );
 				device->setEventReceiver( settingsCtrl );
 			}
 			return true;
+		} else if ( event.KeyInput.Key == irr::KEY_F2 && event.KeyInput.PressedDown ) {
+			if ( !dlgVisible ) {
+				dlgVisible = true;
+				device->getCursorControl()->setVisible( true );
+				exDlg = new mdcExhibitDlg( guienv, driver, -1 );
+			}
+			return true;
+		}
+	} else if( event.EventType == irr::EET_GUI_EVENT ) {
+		if( event.GUIEvent.EventType == irr::gui::EGET_ELEMENT_CLOSED ) {
+			if ( exDlg != NULL ) {
+				exDlg->closeWindow();
+				delete exDlg;
+				exDlg = NULL;
+				device->getCursorControl()->setVisible( false );
+				dlgVisible = false;
+			}
 		}
 	}
 	return false;
 }
 
 void mdcApplication::onSettingsDialogHidden() {
-	settingsVisible = false;
+	dlgVisible = false;
 
 	const SKeyMap * f  = settings->getForwardKey();
 	const SKeyMap * b  = settings->getBackwardKey();

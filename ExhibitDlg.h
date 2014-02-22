@@ -34,7 +34,7 @@ enum EXDLG_GUI_ELEMENT_IDS {
 
 class mdcExhibitDlg {
 	public:
-	mdcExhibitDlg( irr::gui::IGUIEnvironment *, int );
+	mdcExhibitDlg( irr::gui::IGUIEnvironment *, video::IVideoDriver *, int );
 	~mdcExhibitDlg();
 
 	void                          closeWindow() const;
