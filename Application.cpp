@@ -116,19 +116,72 @@ mdcApplication::~mdcApplication(){
 }
 
 void mdcApplication::loadScene(){
-	scene = new mdcScene( device );
+	int                       nEx;
+	vec3_t                    r, s, t;
+	float                     ra;
+	core::stringc             path;
+	int                  *    ids;
+	char                 *    modelPath;
+	scene::IAnimatedMesh *    mesh;
+	scene::ISceneNode    *    node;
 
-	const SKeyMap * f  = settings->getForwardKey();
-	const SKeyMap * b  = settings->getBackwardKey();
-	const SKeyMap * sl = settings->getStrafeLeftKey();
-	const SKeyMap * sr = settings->getStrafeRightKey();
+	const SKeyMap        *    f  = settings->getForwardKey();
+	const SKeyMap        *    b  = settings->getBackwardKey();
+	const SKeyMap        *    sl = settings->getStrafeLeftKey();
+	const SKeyMap        *    sr = settings->getStrafeRightKey();
+
+	scene = new mdcScene( device );
 
 	scene->changeCameraKeyMaps( *f, *b, *sl, *sr );
 
 	exhibits = mdcExhibitMdl::getInstance();
+
 	if ( !exhibits->setDatabaseFile( DB_FILENAME ) ) {
 		std::cerr << "The exhibits database could not be opened." << std::endl;
 	}
+
+	device->getFileSystem()->addFileArchive( "exhibits/exhibits.zip" );
+
+	nEx = exhibits->getNumOfExhibits();
+	ids = ( int * )malloc( sizeof( int ) * nEx );
+	exhibits->getFirstNExhibitIds( ids, nEx );
+
+	for ( int i = 0; i < nEx; i++ ) {
+
+		exhibits->getRotationById( r, ids[ i ] );
+		exhibits->getTranslationById( t, ids[ i ] );
+		exhibits->getScalingById( s, ids[ i ] );
+		ra = exhibits->getRotationAmountById( ids [ i ] );
+
+		exhibits->getExhibitModelPathById( &modelPath, ids[ i ] );
+
+		if ( modelPath != NULL ) {
+			path = "exhibits/";
+			path += modelPath;
+
+			mesh = smgr->getMesh( path.c_str() );
+			node = smgr->addOctreeSceneNode( mesh->getMesh( 0 ), NULL, ids[ i ], 1024 );
+			if ( node != NULL ) {
+				node->setMaterialFlag( video::EMF_LIGHTING, false );
+				node->setMaterialFlag( video::EMF_NORMALIZE_NORMALS, true );
+				node->setMaterialType( video::EMT_SOLID );
+
+				r.x = 0;
+				r.y = r.y * ra;
+				r.z = 0;
+
+				node->setRotation( core::vector3df( r.x, r.y, r.z ) );
+				node->setScale( core::vector3df( s.x, s.y, s.z ) );
+				node->setPosition( core::vector3df( t.x, t.y, t.z ) );
+
+				scene->addMeshToCollisionDetection( mesh, node );
+			}
+		}
+
+		free( modelPath );
+	}
+
+	free( ids );
 }
 
 /*------------------------------------------------------------------------------

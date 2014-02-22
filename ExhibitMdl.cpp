@@ -32,12 +32,6 @@ using std::cout;
 using std::cerr;
 using std::endl;
 
-typedef struct VEC_3 {
-  float x;
-  float y;
-  float z;
-} vec3_t;
-
 void swap( int &, int & );
 
 mdcExhibitMdl * mdcExhibitMdl::instance = NULL;
@@ -255,7 +249,7 @@ void mdcExhibitMdl::getExhibitTitleById( char ** title, int id ) {
 
     rc = sqlite3_step( ppStmt );
 
-    if ( rc != SQLITE_ROW || rc != SQLITE_DONE ) {
+    if ( rc != SQLITE_ROW && rc != SQLITE_DONE ) {
     	cerr << "mdcExhibitMdl::getExhibitTitleById() - Failed to get an exhibit from the database: " << sqlite3_errmsg( db ) << endl;
     	*title = NULL;
     	return;
@@ -302,7 +296,7 @@ void mdcExhibitMdl::getExhibitDescriptionById( char ** desc, int id ) {
 
     rc = sqlite3_step( ppStmt );
 
-    if ( rc != SQLITE_ROW || rc != SQLITE_DONE ) {
+    if ( rc != SQLITE_ROW && rc != SQLITE_DONE ) {
     	cerr << "mdcExhibitMdl::getExhibitDescriptionById() - Failed to get an exhibit from the database: " << sqlite3_errmsg( db ) << endl;
     	*desc = NULL;
     	return;
@@ -349,8 +343,9 @@ void mdcExhibitMdl::getExhibitModelPathById( char ** path, int id ) {
 
     rc = sqlite3_step( ppStmt );
 
-    if ( rc != SQLITE_ROW || rc != SQLITE_DONE ) {
-    	cerr << "mdcExhibitMdl::getExhibitModelPathById() - Failed to get an exhibit from the database: " << sqlite3_errmsg( db ) << endl;
+    if ( rc != SQLITE_ROW && rc != SQLITE_DONE ) {
+
+    	cerr << rc << " mdcExhibitMdl::getExhibitModelPathById() - Failed to get an exhibit from the database: " << sqlite3_errmsg( db ) << endl;
     	*path = NULL;
     	return;
     }
@@ -396,7 +391,7 @@ void mdcExhibitMdl::getExhibitPhotoPathById( char ** path, int id ) {
 
     rc = sqlite3_step( ppStmt );
 
-    if ( rc != SQLITE_ROW || rc != SQLITE_DONE ) {
+    if ( rc != SQLITE_ROW && rc != SQLITE_DONE ) {
     	cerr << "mdcExhibitMdl::getExhibitPhotoPathById() - Failed to get an exhibit from the database: " << sqlite3_errmsg( db ) << endl;
     	*path = NULL;
     	return;
@@ -462,6 +457,9 @@ void mdcExhibitMdl::getTranslationById( vec3_t & trans, int id ) {
 
   } else {
     cerr << "mdcExhibitMdl::getTranslationById() - Database is unusable." << endl;
+    trans.x = BAD_VALUE;
+	trans.y = BAD_VALUE;
+	trans.z = BAD_VALUE;
   }
 }
 
@@ -510,6 +508,9 @@ void mdcExhibitMdl::getRotationById( vec3_t & rot, int id ) {
 
   } else {
     cerr << "mdcExhibitMdl::getRotationById() - Database is unusable." << endl;
+    rot.x = BAD_VALUE;
+    rot.y = BAD_VALUE;
+	rot.z = BAD_VALUE;
   }
 }
 
@@ -600,6 +601,9 @@ void mdcExhibitMdl::getScalingById( vec3_t & scal, int id ) {
     }
   } else {
     cerr << "mdcExhibitMdl::ScalingById() - Database is unusable." << endl;
+    scal.x = BAD_VALUE;
+    scal.y = BAD_VALUE;
+	scal.z = BAD_VALUE;
   }
 }
 

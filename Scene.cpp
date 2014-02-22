@@ -135,11 +135,11 @@ mdcScene::mdcScene( IrrlichtDevice * device ) {
 						visible = sTrue.equals_ignore_case( xml->getAttributeValueSafe( L"visible" ) );
 						alpha   = sTrue.equals_ignore_case( xml->getAttributeValueSafe( L"alpha" ) );
 
-						// Actually read the mesh and add it to the scene graph.
+						// Read the mesh and add it to the scene graph.
 						mesh = smgr->getMesh( key );
 						node = smgr->addOctreeSceneNode( mesh->getMesh( 0 ), NULL, -1, TRIANGLE_LIMIT );
 
-						if( node ){
+						if( node != NULL ){
 							// All models ignore lighting and normalize normals for future shader use.
 							node->setMaterialFlag( video::EMF_LIGHTING, false );
 							node->setMaterialFlag( video::EMF_NORMALIZE_NORMALS, true );

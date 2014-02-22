@@ -30,6 +30,12 @@
 
 using std::string;
 
+typedef struct VEC_3 {
+  float x;
+  float y;
+  float z;
+} vec3_t;
+
 class mdcExhibitMdl{
 	public:
 		static mdcExhibitMdl *    getInstance();
