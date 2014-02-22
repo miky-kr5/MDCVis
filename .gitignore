@@ -1,8 +1,6 @@
 # Directories
 bin/
 media/
-include/
-lib/
 obj/
 
 # Compiled Object files
