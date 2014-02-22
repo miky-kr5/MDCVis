@@ -84,7 +84,7 @@ static void setKeyMapComboBoxSelected( gui::IGUIComboBox *, mdcSettingsMdl *, en
 int mdcSettingsDlg::w = -1;
 int mdcSettingsDlg::h = -1;
 
-mdcSettingsDlg::mdcSettingsDlg( gui::IGUIEnvironment * env){
+mdcSettingsDlg::mdcSettingsDlg( gui::IGUIEnvironment * env) {
 	model = mdcSettingsMdl::getInstance();
 
 	if ( w == -1 && h == -1) {
@@ -122,7 +122,7 @@ mdcSettingsDlg::mdcSettingsDlg( gui::IGUIEnvironment * env){
     aaBox->addItem( L"x8" );
     aaBox->addItem( L"x16" );
 
-	switch( model->getAntialiasingFactor() ){
+	switch( model->getAntialiasingFactor() ) {
 		default:
 		case 0:
 			aaBox->setSelected( 0 );
@@ -195,7 +195,7 @@ mdcSettingsDlg::mdcSettingsDlg( gui::IGUIEnvironment * env){
             CNCL_BTN.c_str() );
 }
 
-void mdcSettingsDlg::closeWindow() const{
+void mdcSettingsDlg::closeWindow() const {
 	windowSettings->remove();
 }
 
@@ -223,7 +223,7 @@ aaFactor_t mdcSettingsDlg::getSelectedAAFactor() const {
 	return NONE;
 }
 
-unsigned int mdcSettingsDlg::getSelectedScreenWidth()  const{
+unsigned int mdcSettingsDlg::getSelectedScreenWidth()  const {
 	switch ( resBox->getSelected() ) {
 		case 0:
 			return 640;
@@ -238,7 +238,7 @@ unsigned int mdcSettingsDlg::getSelectedScreenWidth()  const{
 	return 640;
 }
 
-unsigned int mdcSettingsDlg::getSelectedScreenHeight() const{
+unsigned int mdcSettingsDlg::getSelectedScreenHeight() const {
 	switch ( resBox->getSelected() ) {
 		case 0:
 			return 480;

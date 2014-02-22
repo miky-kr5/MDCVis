@@ -36,7 +36,7 @@ typedef struct VEC_3 {
   float z;
 } vec3_t;
 
-class mdcExhibitMdl{
+class mdcExhibitMdl {
 	public:
 		static mdcExhibitMdl *    getInstance();
 		static void               freeInstance();

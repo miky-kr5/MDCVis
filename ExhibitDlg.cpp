@@ -51,8 +51,10 @@ static const stringw DEF_DESCR =
 								"cursus. Ut posuere augue quis adipiscing molestie. Nullam adipiscing, ligula"
 								"eget malesuada pretium, est nunc mollis elit, in sagittis mi arcu eget metus.";
 
-mdcExhibitDlg::mdcExhibitDlg( gui::IGUIEnvironment * gui, video::IVideoDriver * driver, int exId ){
-	int                   w, h;
+int mdcExhibitDlg::w = -1;
+int mdcExhibitDlg::h = -1;
+
+mdcExhibitDlg::mdcExhibitDlg( gui::IGUIEnvironment * gui, video::IVideoDriver * driver, int exId ) {
 	stringw               title, desc, photo;
 	mdcSettingsMdl   *    settings = mdcSettingsMdl::getInstance();
 	char             *    exhibitTitle;
@@ -60,8 +62,10 @@ mdcExhibitDlg::mdcExhibitDlg( gui::IGUIEnvironment * gui, video::IVideoDriver * 
 	char             *    photoPath;
 	gui::IGUIImage   *    img;
 
-	w = settings->getScreenWidth() / 2;
-	h = settings->getScreenHeight() / 2;
+	if ( w == -1 && h == -1) {
+		w = settings->getScreenWidth() / 2;
+		h = settings->getScreenHeight() / 2;
+	}
 
 	mdcSettingsMdl::freeInstance();
 
@@ -117,6 +121,6 @@ mdcExhibitDlg::~mdcExhibitDlg() {
 	mdcExhibitMdl::freeInstance();
 }
 
-void mdcExhibitDlg::closeWindow() const{
+void mdcExhibitDlg::closeWindow() const {
 	win->remove();
 }

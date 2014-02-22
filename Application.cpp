@@ -96,6 +96,8 @@ mdcApplication::mdcApplication(){
 	exDlg = NULL;
 
 	lastFPS = -1;
+	nodeSelected = false;
+	selectedNodeId = 0;
 }
 
 /*------------------------------------------------------------------------------
@@ -182,6 +184,8 @@ void mdcApplication::loadScene(){
 	}
 
 	free( ids );
+
+	collMan = smgr->getSceneCollisionManager();
 }
 
 /*------------------------------------------------------------------------------
@@ -191,13 +195,26 @@ void mdcApplication::loadScene(){
 ; fps count.
 ;-----------------------------------------------------------------------------*/
 void mdcApplication::run(){
-	int fps;
-	core::stringw str;
+	int                                fps;
+	core::stringw                      str;
+	core::line3d<f32>                  ray;
+	scene::ICameraSceneNode *          camera;
+	scene::ISceneNode       *          selectedSceneNode;
+	core::vector3df                    intersection;
+    core::triangle3df                  hitTriangle;
 
 	// Render everything until the user requests the application to close itself.
 	if( device != NULL ){
-		while( device->run() ){
-			if( device->isWindowActive() ){
+		if( device->isWindowActive() && scene == NULL){
+			driver->beginScene( true, true, video::SColor( 255, 97, 220, 220 ) );
+			guienv->drawAll();
+			driver->endScene();
+			loadScene();
+			loadingScreen->remove();
+		}
+
+		while( device->run() ) {
+			if( device->isWindowActive() ) {
 				driver->beginScene( true, true, video::SColor( 255, 97, 220, 220 ) );
 				smgr->drawAll();
 				guienv->drawAll();
@@ -205,7 +222,7 @@ void mdcApplication::run(){
 
 				fps = driver->getFPS();
 
-				if( !settings->isFullScreen() && lastFPS != fps ){
+				if( !settings->isFullScreen() && lastFPS != fps ) {
 					str = L"Museo de Ciencias :: [";
 					str += driver->getName();
 					str += "] FPS:";
@@ -214,12 +231,35 @@ void mdcApplication::run(){
 					lastFPS = fps;
 				}
 
-				if ( scene == NULL ){
+				if ( scene == NULL ) {
 					loadScene();
 					loadingScreen->remove();
-				}
+					camera = scene->getCamera();
+				} else {
+					ray.start = camera->getPosition();
+        			ray.end = ray.start + ( camera->getTarget() - ray.start ).normalize() * 300.0f;
 
-			}else device->yield();
+        			selectedSceneNode = collMan->getSceneNodeAndCollisionPointFromRay(
+																						ray,
+																						intersection,
+																						hitTriangle,
+																						0,
+																						0
+																					 );
+
+        			if ( selectedSceneNode != NULL && !dlgVisible ) {
+						selectedNodeId = selectedSceneNode->getID();
+						device->getCursorControl()->setActiveIcon( gui::ECI_HAND );
+						device->getCursorControl()->setVisible( true );
+
+        			} else {
+        				if ( !dlgVisible ) {
+							selectedNodeId = 0;
+							device->getCursorControl()->setVisible( false );
+        				}
+        			}
+				}
+			} else device->yield();
 		}
 	}
 }
@@ -238,28 +278,39 @@ bool mdcApplication::OnEvent( const SEvent& event ) {
 
 		} else if ( event.KeyInput.Key == irr::KEY_F1 && event.KeyInput.PressedDown ) {
 			if ( !dlgVisible ) {
+				stopMovement();
 				dlgVisible = true;
+				device->getCursorControl()->setActiveIcon( gui::ECI_NORMAL );
 				device->getCursorControl()->setVisible( true );
 				settingsCtrl->setDialog( new mdcSettingsDlg( guienv ) );
 				device->setEventReceiver( settingsCtrl );
+				return true;
 			}
-			return true;
-		} else if ( event.KeyInput.Key == irr::KEY_F2 && event.KeyInput.PressedDown ) {
-			if ( !dlgVisible ) {
+		}
+	} else if (event.EventType == EET_MOUSE_INPUT_EVENT) {
+		if ( event.MouseInput.Event == EMIE_LMOUSE_PRESSED_DOWN || event.MouseInput.Event == EMIE_RMOUSE_PRESSED_DOWN ) {
+			if ( !dlgVisible && selectedNodeId > 0 ) {
+				stopMovement();
 				dlgVisible = true;
+				device->getCursorControl()->setActiveIcon( gui::ECI_NORMAL );
 				device->getCursorControl()->setVisible( true );
-				exDlg = new mdcExhibitDlg( guienv, driver, -1 );
+				exDlg = new mdcExhibitDlg( guienv, driver, selectedNodeId );
+				return true;
 			}
-			return true;
 		}
 	} else if( event.EventType == irr::EET_GUI_EVENT ) {
 		if( event.GUIEvent.EventType == irr::gui::EGET_ELEMENT_CLOSED ) {
 			if ( exDlg != NULL ) {
+				int w = settings->getScreenWidth();
+				int h = settings->getScreenHeight();
 				exDlg->closeWindow();
 				delete exDlg;
 				exDlg = NULL;
 				device->getCursorControl()->setVisible( false );
 				dlgVisible = false;
+				guienv->setFocus( 0 );
+				device->getCursorControl()->setPosition( core::vector2d<s32>( w / 2, h / 2 ) );
+				return true;
 			}
 		}
 	}
@@ -267,6 +318,8 @@ bool mdcApplication::OnEvent( const SEvent& event ) {
 }
 
 void mdcApplication::onSettingsDialogHidden() {
+	int w = settings->getScreenWidth();
+	int h = settings->getScreenHeight();
 	dlgVisible = false;
 
 	const SKeyMap * f  = settings->getForwardKey();
@@ -278,4 +331,41 @@ void mdcApplication::onSettingsDialogHidden() {
 
 	device->getCursorControl()->setVisible( false );
 	device->setEventReceiver( this );
+
+	guienv->setFocus( 0 );
+	device->getCursorControl()->setPosition( core::vector2d<s32>( w / 2, h / 2 ) );
+}
+
+void mdcApplication::stopMovement() {
+	SEvent fwEvt;
+	SEvent::SKeyInput fKey;
+	fwEvt.EventType = EET_KEY_INPUT_EVENT;
+	fKey.Key = settings->getForwardKey()->KeyCode;
+	fKey.PressedDown = false;
+	fwEvt.KeyInput = fKey;
+	device->postEventFromUser ( fwEvt );
+
+	SEvent bkEvt;
+	SEvent::SKeyInput bKey;
+	bkEvt.EventType = EET_KEY_INPUT_EVENT;
+	bKey.Key = settings->getBackwardKey()->KeyCode;
+	bKey.PressedDown = false;
+	bkEvt.KeyInput = bKey;
+	device->postEventFromUser ( bkEvt );
+
+	SEvent slEvt;
+	SEvent::SKeyInput slKey;
+	slEvt.EventType = EET_KEY_INPUT_EVENT;
+	slKey.Key = settings->getStrafeLeftKey()->KeyCode;
+	slKey.PressedDown = false;
+	slEvt.KeyInput = slKey;
+	device->postEventFromUser ( slEvt );
+
+	SEvent srEvt;
+	SEvent::SKeyInput srKey;
+	srEvt.EventType = EET_KEY_INPUT_EVENT;
+	srKey.Key = settings->getForwardKey()->KeyCode;
+	srKey.PressedDown = false;
+	srEvt.KeyInput = srKey;
+	device->postEventFromUser ( srEvt );
 }

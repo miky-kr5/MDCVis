@@ -20,6 +20,8 @@
 ; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ;-----------------------------------------------------------------------------*/
 
+#include <cassert>
+
 #include "Scene.h"
 
 #define FAR_UNITS             50000.0f
@@ -76,8 +78,8 @@ mdcScene::mdcScene( IrrlichtDevice * device ) {
 
 	// Pointers to the relevant irrLicht managers.
 	video::IVideoDriver *     driver = device->getVideoDriver();
-	io::IXMLReader *          xml    = device->getFileSystem()->createXMLReader("scene.xml");
-	smgr                             = device->getSceneManager();
+	io::IXMLReader      *     xml    = device->getFileSystem()->createXMLReader("scene.xml");
+	smgr = device->getSceneManager();
 
 	// Setup the keyboard controls.
 	keyMap[0].Action = EKA_MOVE_FORWARD;
@@ -280,7 +282,13 @@ void mdcScene::addMeshToCollisionDetection( scene::IAnimatedMesh * mesh, scene::
 	mapSelector = smgr->createOctreeTriangleSelector( mesh->getMesh(0), node, MIN_POLYGONS );
 	metaSelector->addTriangleSelector( mapSelector );
 
+	node->setTriangleSelector( mapSelector );
+
 	mapSelector->drop();
+}
+
+scene::ICameraSceneNode * mdcScene::getCamera() {
+	return camera;
 }
 
 void mdcScene::changeCameraKeyMaps( SKeyMap forward, SKeyMap backward, SKeyMap strafeL, SKeyMap strafeR ) const {

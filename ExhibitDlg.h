@@ -40,7 +40,9 @@ class mdcExhibitDlg {
 	void                          closeWindow() const;
 
 	private:
-		mdcExhibitMdl *           model;
+		static int                w;
+		static int                h;
+		mdcExhibitMdl        *    model;
 		irr::gui::IGUIWindow *    win;
 };
 

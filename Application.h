@@ -49,22 +49,26 @@ class mdcApplication : public IEventReceiver {
 
 	private:
 		// Irrlicht engine objects.
-		IrrlichtDevice       *      device;
-		video::IVideoDriver  *      driver;
-		scene::ISceneManager *      smgr;
-		gui::IGUIEnvironment *      guienv;
+		IrrlichtDevice                *      device;
+		video::IVideoDriver           *      driver;
+		scene::ISceneManager          *      smgr;
+		gui::IGUIEnvironment          *      guienv;
 
-		gui::IGUIImage       *      loadingScreen;
-		mdcSettingsMdl       *      settings;
-		mdcSettingsCtrl      *      settingsCtrl;
-		mdcScene             *      scene;
-		mdcExhibitMdl        *      exhibits;
-		mdcExhibitDlg        *      exDlg;
+		gui::IGUIImage                *      loadingScreen;
+		mdcSettingsMdl                *      settings;
+		mdcSettingsCtrl               *      settingsCtrl;
+		mdcScene                      *      scene;
+		mdcExhibitMdl                 *      exhibits;
+		mdcExhibitDlg                 *      exDlg;
+		scene::ISceneCollisionManager *      collMan;
 
 		int                         lastFPS;
 		bool                        dlgVisible;
+		bool                        nodeSelected;
+		int                         selectedNodeId;
 
 		void                        loadScene();
+		void                        stopMovement();
 };
 
 #endif // APPLICATION_H

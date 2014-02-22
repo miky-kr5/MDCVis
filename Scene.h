@@ -37,6 +37,7 @@ class mdcScene {
 
 		void changeCameraKeyMaps( SKeyMap, SKeyMap, SKeyMap, SKeyMap )                 const;
 		void addMeshToCollisionDetection( scene::IAnimatedMesh *, scene::ISceneNode *) const;
+		scene::ICameraSceneNode * getCamera();
 
 	private:
 		scene::ICameraSceneNode                    *     camera;
