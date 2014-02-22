@@ -22,6 +22,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <cstring>
+#include <cassert>
 
 #include <sqlite/sqlite3.h>
 
@@ -254,6 +255,12 @@ void mdcExhibitMdl::getExhibitTitleById( char ** title, int id ) {
 
     rc = sqlite3_step( ppStmt );
 
+    if ( rc != SQLITE_ROW || rc != SQLITE_DONE ) {
+    	cerr << "mdcExhibitMdl::getExhibitTitleById() - Failed to get an exhibit from the database: " << sqlite3_errmsg( db ) << endl;
+    	*title = NULL;
+    	return;
+    }
+
     *title = ( char * )malloc( sizeof( char ) * strlen( reinterpret_cast< const char * >( sqlite3_column_text( ppStmt, 0 ) ) ) + 1 );
     strcpy( *title, reinterpret_cast< const char * >( sqlite3_column_text( ppStmt, 0 ) ) );
 
@@ -294,6 +301,12 @@ void mdcExhibitMdl::getExhibitDescriptionById( char ** desc, int id ) {
     }
 
     rc = sqlite3_step( ppStmt );
+
+    if ( rc != SQLITE_ROW || rc != SQLITE_DONE ) {
+    	cerr << "mdcExhibitMdl::getExhibitDescriptionById() - Failed to get an exhibit from the database: " << sqlite3_errmsg( db ) << endl;
+    	*desc = NULL;
+    	return;
+    }
 
     *desc = ( char * )malloc( sizeof( char ) * strlen( reinterpret_cast< const char * >( sqlite3_column_text( ppStmt, 0 ) ) ) + 1 );
     strcpy( *desc, reinterpret_cast< const char * >( sqlite3_column_text( ppStmt, 0 ) ) );
@@ -336,6 +349,12 @@ void mdcExhibitMdl::getExhibitModelPathById( char ** path, int id ) {
 
     rc = sqlite3_step( ppStmt );
 
+    if ( rc != SQLITE_ROW || rc != SQLITE_DONE ) {
+    	cerr << "mdcExhibitMdl::getExhibitModelPathById() - Failed to get an exhibit from the database: " << sqlite3_errmsg( db ) << endl;
+    	*path = NULL;
+    	return;
+    }
+
     *path = ( char * )malloc( sizeof( char ) * strlen( reinterpret_cast< const char * >( sqlite3_column_text( ppStmt, 0 ) ) ) + 1 );
     strcpy( *path, reinterpret_cast< const char * >( sqlite3_column_text( ppStmt, 0 ) ) );
 
@@ -376,6 +395,12 @@ void mdcExhibitMdl::getExhibitPhotoPathById( char ** path, int id ) {
     }
 
     rc = sqlite3_step( ppStmt );
+
+    if ( rc != SQLITE_ROW || rc != SQLITE_DONE ) {
+    	cerr << "mdcExhibitMdl::getExhibitPhotoPathById() - Failed to get an exhibit from the database: " << sqlite3_errmsg( db ) << endl;
+    	*path = NULL;
+    	return;
+    }
 
     *path = ( char * )malloc( sizeof( char ) * strlen( reinterpret_cast< const char * >( sqlite3_column_text( ppStmt, 0 ) ) ) + 1 );
     strcpy( *path, reinterpret_cast< const char * >( sqlite3_column_text( ppStmt, 0 ) ) );
