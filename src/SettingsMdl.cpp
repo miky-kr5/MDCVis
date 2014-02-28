@@ -85,8 +85,15 @@ void mdcSettingsMdl::freeInstance() {
 
 mdcSettingsMdl::mdcSettingsMdl(): refs( 0 ), changed(false) {
 	screenDimensions = new core::dimension2d<u32>();
-
+#if defined( _WIN32 ) || defined( __MINGW32__ )
+	char * userHome = getenv( "APPDATA" );
+#elif defined( __linux__ )
 	char * userHome = getenv( "HOME" );
+#else
+#error "Not a GNU/Linux or Windows platform."
+#endif
+
+
 	if ( userHome != NULL ) {
 		settingsPath = userHome;
 

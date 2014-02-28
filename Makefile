@@ -1,12 +1,13 @@
 OBJECTS = src/Application.o src/ExhibitDlg.o src/ExhibitMdl.o src/main.o src/Scene.o src/SettingsCtrl.o src/SettingsDlg.o src/SettingsMdl.o
 
-ifdef SystemRoot
-	include Windows.mk
+ifeq ($(shell uname), Linux)
+	include Linux.mk
 else
-	ifeq ($(shell uname), Linux)
-		include Linux.mk	
+	ifeq ($(shell uname -o), Msys)
+		include Windows.mk
 	endif
 endif
+
 
 all: FLAGS += -O3
 all: $(OBJECTS)
