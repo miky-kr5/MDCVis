@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
-; File:          Scene.h
+; File:          Scene.hpp
 ; Description:   Declaration of the 3D scene loader class.
 ; Author:        Miguel Angel Astor, sonofgrendel@gmail.com
 ; Date created:  2/13/2014
@@ -25,7 +25,7 @@
 
 #include <irrlicht.h>
 
-#include "definitions.h"
+#include "definitions.hpp"
 
 using namespace irr;
 using core::stringw;

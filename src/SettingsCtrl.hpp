@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
-; File:          SettingsCtrl.h
+; File:          SettingsCtrl.hpp
 ; Description:   Declaration of the settings controller class.
 ; Author:        Miguel Angel Astor, sonofgrendel@gmail.com
 ; Date created:  2/18/2014
@@ -25,9 +25,9 @@
 
 #include <irrlicht.h>
 
-#include "definitions.h"
-#include "SettingsMdl.h"
-#include "SettingsDlg.h"
+#include "definitions.hpp"
+#include "SettingsMdl.hpp"
+#include "SettingsDlg.hpp"
 
 class mdcSettingsCtrl : public irr::IEventReceiver {
 	public:

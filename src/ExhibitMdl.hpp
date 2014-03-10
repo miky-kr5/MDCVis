@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
-; File:          ExhibitMdl.h
+; File:          ExhibitMdl.hpp
 ; Description:   Declaration of the exhibit model class.
 ; Author:        Miguel Angel Astor, sonofgrendel@gmail.com
 ; Date created:  2/19/2014
@@ -24,7 +24,7 @@
 
 #include <string>
 
-#include "definitions.h"
+#include "definitions.hpp"
 
 #define BAD_VALUE -1
 

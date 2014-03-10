@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
-; File:          SettingsDlg.h
+; File:          SettingsDlg.hpp
 ; Description:   Declaration of the settings configuration dialog class.
 ; Author:        Miguel Angel Astor, sonofgrendel@gmail.com
 ; Date created:  2/18/2014
@@ -25,8 +25,8 @@
 
 #include <irrlicht.h>
 
-#include "definitions.h"
-#include "SettingsMdl.h"
+#include "definitions.hpp"
+#include "SettingsMdl.hpp"
 
 using namespace irr;
 

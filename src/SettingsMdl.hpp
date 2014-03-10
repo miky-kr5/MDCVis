@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
-; File:          SettingsMdl.h
+; File:          SettingsMdl.hpp
 ; Description:   Declaration of the application settings class.
 ; Author:        Miguel Angel Astor, sonofgrendel@gmail.com
 ; Date created:  2/12/2014
@@ -26,7 +26,7 @@
 #include <string>
 #include <irrlicht.h>
 
-#include "definitions.h"
+#include "definitions.hpp"
 
 using namespace irr;
 using std::string;

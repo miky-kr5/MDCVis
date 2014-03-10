@@ -29,7 +29,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
-#include "SettingsMdl.h"
+#include "SettingsMdl.hpp"
 
 using std::ifstream;
 using std::ofstream;

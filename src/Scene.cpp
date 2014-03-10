@@ -22,7 +22,7 @@
 
 #include <cassert>
 
-#include "Scene.h"
+#include "Scene.hpp"
 
 #define FAR_UNITS             50000.0f
 #define CAMERA_ROTATE_SPEED   100.0f

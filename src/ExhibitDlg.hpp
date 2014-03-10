@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
-; File:          ExhibitDlg.h
+; File:          ExhibitDlg.hpp
 ; Description:   Declaration of the exhibit dialog class.
 ; Author:        Miguel Angel Astor, sonofgrendel@gmail.com
 ; Date created:  2/21/2014
@@ -25,8 +25,8 @@
 
 #include <irrlicht.h>
 
-#include "definitions.h"
-#include "ExhibitMdl.h"
+#include "definitions.hpp"
+#include "ExhibitMdl.hpp"
 
 enum EXDLG_GUI_ELEMENT_IDS {
 	EXDLG_WIN = 0x1000

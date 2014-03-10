@@ -20,11 +20,11 @@
 ; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ;-----------------------------------------------------------------------------*/
 
-#include "SettingsCtrl.h"
-#include "SettingsDlg.h"
-#include "Application.h"
-
 #include <iostream>
+
+#include "SettingsCtrl.hpp"
+#include "SettingsDlg.hpp"
+#include "Application.hpp"
 
 mdcSettingsCtrl::mdcSettingsCtrl( mdcApplication * app ): dialog(NULL) {
 	this->app = app;

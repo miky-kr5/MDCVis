@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
-; File:          Application.h
+; File:          Application.hpp
 ; Description:   Declaration of the base application class.
 ; Author:        Miguel Angel Astor, sonofgrendel@gmail.com
 ; Date created:  9/17/2013
@@ -25,12 +25,12 @@
 
 #include <irrlicht.h>
 
-#include "definitions.h"
-#include "SettingsMdl.h"
-#include "SettingsCtrl.h"
-#include "Scene.h"
-#include "ExhibitMdl.h"
-#include "ExhibitDlg.h"
+#include "definitions.hpp"
+#include "SettingsMdl.hpp"
+#include "SettingsCtrl.hpp"
+#include "Scene.hpp"
+#include "ExhibitMdl.hpp"
+#include "ExhibitDlg.hpp"
 
 using namespace irr;
 

@@ -24,8 +24,8 @@
 #include <cstdlib>
 #include <cassert>
 
-#include "Application.h"
-#include "SettingsDlg.h"
+#include "Application.hpp"
+#include "SettingsDlg.hpp"
 
 static const char * DB_FILENAME = "exhibits/mdc.db";
 

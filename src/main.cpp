@@ -22,7 +22,7 @@
 
 #include <cstdlib>
 
-#include "Application.h"
+#include "Application.hpp"
 
 int main( int argc, char** argv ) {
 	mdcApplication *app = new mdcApplication();
