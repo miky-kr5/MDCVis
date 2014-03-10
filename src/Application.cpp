@@ -202,6 +202,8 @@ void mdcApplication::run(){
 	scene::ISceneNode       *          selectedSceneNode;
 	core::vector3df                    intersection;
     core::triangle3df                  hitTriangle;
+	
+	camera = NULL;
 
 	// Render everything until the user requests the application to close itself.
 	if( device != NULL ){
@@ -235,7 +237,7 @@ void mdcApplication::run(){
 					loadScene();
 					loadingScreen->remove();
 					camera = scene->getCamera();
-				} else {
+				} else if ( camera != NULL ) {
 					ray.start = camera->getPosition();
         			ray.end = ray.start + ( camera->getTarget() - ray.start ).normalize() * 300.0f;
 

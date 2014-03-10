@@ -2,6 +2,7 @@
 bin/
 media/
 obj/
+lib/
 
 # Compiled Object files
 *.slo
@@ -15,6 +16,7 @@ obj/
 # Compiled Static libraries
 *.lai
 *.la
+*.a
 
 # Others
 *.d
