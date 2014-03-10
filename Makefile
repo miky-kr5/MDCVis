@@ -23,28 +23,28 @@ debug: $(OBJECTS)
 	$(COMPILER) -o $(TARGET) $(OBJECTS) $(FLAGS) $(INCLUDE) $(LIBDIRS) $(LIBS)
 	cd ../
 
-src/Application.o: src/Application.cpp src/Application.h src/definitions.h
+src/Application.o: src/Application.cpp src/Application.hpp src/definitions.hpp
 	$(COMPILER) -o $@ -c $< $(FLAGS) $(INCLUDE)
 
-src/ExhibitDlg.o: src/ExhibitDlg.cpp src/ExhibitDlg.h src/definitions.h
+src/ExhibitDlg.o: src/ExhibitDlg.cpp src/ExhibitDlg.hpp src/definitions.hpp
 	$(COMPILER) -o $@ -c $< $(FLAGS) $(INCLUDE)
 
-src/ExhibitMdl.o: src/ExhibitMdl.cpp src/ExhibitMdl.h src/definitions.h
+src/ExhibitMdl.o: src/ExhibitMdl.cpp src/ExhibitMdl.hpp src/definitions.hpp
 	$(COMPILER) -o $@ -c $< $(FLAGS) $(INCLUDE)
 
 src/main.o: src/main.cpp
 	$(COMPILER) -o $@ -c $< $(FLAGS) $(INCLUDE)
 
-src/Scene.o: src/Scene.cpp src/Scene.h src/definitions.h
+src/Scene.o: src/Scene.cpp src/Scene.hpp src/definitions.hpp
 	$(COMPILER) -o $@ -c $< $(FLAGS) $(INCLUDE)
 
-src/SettingsCtrl.o: src/SettingsCtrl.cpp src/SettingsCtrl.h src/definitions.h
+src/SettingsCtrl.o: src/SettingsCtrl.cpp src/SettingsCtrl.hpp src/definitions.hpp
 	$(COMPILER) -o $@ -c $< $(FLAGS) $(INCLUDE)
 
-src/SettingsDlg.o: src/SettingsDlg.cpp src/SettingsDlg.h src/definitions.h
+src/SettingsDlg.o: src/SettingsDlg.cpp src/SettingsDlg.hpp src/definitions.hpp
 	$(COMPILER) -o $@ -c $< $(FLAGS) $(INCLUDE)
 
-src/SettingsMdl.o: src/SettingsMdl.cpp src/SettingsMdl.h src/definitions.h
+src/SettingsMdl.o: src/SettingsMdl.cpp src/SettingsMdl.hpp src/definitions.hpp
 	$(COMPILER) -o $@ -c $< $(FLAGS) $(INCLUDE)
 
 ifeq ($(shell uname), Linux)
@@ -65,7 +65,10 @@ install:
 	echo "Icon=/opt/mdcvis/mdcicon.png" >> /usr/share/applications/mdc.desktop
 	echo "Categories=Education;Science;" >> /usr/share/applications/mdc.desktop
 	echo >> /usr/share/applications/mdc.desktop
-	chmod a+x /usr/share/applications/mdc.desktop 
+	chmod a+x /usr/share/applications/mdc.desktop
+	
+uninstall:
+	$(RM) -rf /opt/mdcvis /usr/share/applications/mdc.desktop
 endif
 
 clean:
