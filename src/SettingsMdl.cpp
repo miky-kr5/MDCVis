@@ -29,6 +29,10 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
+#if defined( _WIN32 ) || defined( __MINGW32__ )
+#include <windows.h>
+#endif
+
 #include "SettingsMdl.hpp"
 
 using std::ifstream;
@@ -127,10 +131,16 @@ mdcSettingsMdl::mdcSettingsMdl(): refs( 0 ), changed(false) {
 			string command;
 			int success;
 
-			command = "mkdir \"" + settingsPath;
+#if defined( _WIN32 ) || defined( __MINGW32__ )
+			command = "md \"" + settingsPath;
+#elif defined( __linux__ )
+			command = "mkdir - p \"" + settingsPath;
+#else
+#error "Not a GNU/Linux or Windows platform."
+#endif
 			command += "\"";
 			success = system( command.c_str() );
-
+			
 			if ( success != 0 ) {
 				canUseSettings = false;
 			} else {
@@ -433,6 +443,20 @@ void mdcSettingsMdl::saveSettings() const {
 }
 
 bool mdcSettingsMdl::settingsDirExists() const {
+#include <windows.h>
+#include <string>
+
+#if defined( _WIN32 ) || defined( __MINGW32__ ) 
+	DWORD ftyp = GetFileAttributesA( settingsPath.c_str() );
+
+	if ( ftyp == INVALID_FILE_ATTRIBUTES )
+		return false;
+
+	if (ftyp & FILE_ATTRIBUTE_DIRECTORY)
+		return true;
+
+	return false;
+#elif defined( __linux__ )
 	struct stat info;
 
 	stat( settingsPath.c_str(), &info );
@@ -442,6 +466,9 @@ bool mdcSettingsMdl::settingsDirExists() const {
 	} else {
 		return false;
 	}
+#else
+#error "Not a GNU/Linux or Windows platform."
+#endif
 }
 
 bool mdcSettingsMdl::settingsFileExists() const {

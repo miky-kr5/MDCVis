@@ -9,29 +9,32 @@ all: FLAGS += -O3
 all: INCLUDE += -I/usr/X11R6/include
 all: LIBDIRS = -L/usr/x11R6/lib -L./lib/Linux 
 all: LIBS = -lIrrlicht -lGL -lXxf86vm -lXext -lX11 -lXcursor -lsqlite3 -lpthread -ldl
-all: $(OBJECTS)
-	$(COMPILER) -o $(LINTARGET) $(OBJECTS) $(FLAGS) $(INCLUDE) $(LIBDIRS) $(LIBS)
-
+all: $(LINTARGET)
+	
 debug: FLAGS += -g
 debug: INCLUDE += -I/usr/X11R6/include
 debug: LIBDIRS = -L/usr/x11R6/lib -L./lib/Linux
 debug: LIBS = -lIrrlicht -lGL -lXxf86vm -lXext -lX11 -lXcursor -lsqlite3 -lpthread -ldl
-debug: $(OBJECTS)
-	$(COMPILER) -o $(LINTARGET) $(OBJECTS) $(FLAGS) $(INCLUDE) $(LIBDIRS) $(LIBS)
+debug: $(LINTARGET)
 
 windows: FLAGS += -O3
 windows: LIBDIRS = -L./lib/Windows
 windows: LIBS = -lIrrlicht -lopengl32 -lsqlite3 -lpthreadGC2 -ldl -static-libgcc -static-libstdc++
-windows: $(OBJECTS)
-	windres mdcvis.rc -O coff -o mdcvis.res
-	$(COMPILER) -o $(WINTARGET) $(OBJECTS) mdcvis.res $(FLAGS) $(INCLUDE) $(LIBDIRS) $(LIBS)
+windows: $(WINTARGET)	
 
 debug-windows: FLAGS += -g
 debug-windows: LIBDIRS = -L./lib/Windows
 debug-windows: LIBS = -lIrrlicht -lopengl32 -lsqlite3 -lpthreadGC2 -ldl -static-libgcc -static-libstdc++
-debug-windows: $(OBJECTS)
-	windres mdcvis.rc -O coff -o mdcvis.res
+debug-windows: $(WINTARGET)
+
+$(LINTARGET): $(OBJECTS)
+	$(COMPILER) -o $(LINTARGET) $(OBJECTS) $(FLAGS) $(INCLUDE) $(LIBDIRS) $(LIBS)
+
+$(WINTARGET): $(OBJECTS) mdcvis.res
 	$(COMPILER) -o $(WINTARGET) $(OBJECTS) mdcvis.res $(FLAGS) $(INCLUDE) $(LIBDIRS) $(LIBS)
+
+mdcvis.res: mdcvis.rc
+	windres mdcvis.rc -O coff -o mdcvis.res
 
 src/Application.o: src/Application.cpp src/Application.hpp src/definitions.hpp
 	$(COMPILER) -o $@ -c $< $(FLAGS) $(INCLUDE)
