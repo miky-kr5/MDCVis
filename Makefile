@@ -1,49 +1,66 @@
+COMPILER = g++
+FLAGS = -Wall
+INCLUDE = -I./include
 OBJECTS = src/Application.o src/ExhibitDlg.o src/ExhibitMdl.o src/main.o src/Scene.o src/SettingsCtrl.o src/SettingsDlg.o src/SettingsMdl.o
 
-ifdef SystemRoot
-	include Windows.mk
-else
-	ifeq ($(shell uname), Linux)
-		include Linux.mk	
-	endif
-endif
-
+all: TARGET = bin/MDCVis
 all: FLAGS += -O3
+all: INCLUDE += -I/usr/X11R6/include
+all: LIBDIRS = -L/usr/x11R6/lib -L./lib/Linux 
+all: LIBS = -lIrrlicht -lGL -lXxf86vm -lXext -lX11 -lXcursor -lsqlite3 -lpthread -ldl
 all: $(OBJECTS)
 	mkdir -p bin/
-	cd src/
 	$(COMPILER) -o $(TARGET) $(OBJECTS) $(FLAGS) $(INCLUDE) $(LIBDIRS) $(LIBS)
-	cd ../
 
+debug: TARGET = bin/MDCVis
 debug: FLAGS += -g
+debug: INCLUDE += -I/usr/X11R6/include
+debug: LIBDIRS = -L/usr/x11R6/lib -L./lib/Linux
+debug: LIBS = -lIrrlicht -lGL -lXxf86vm -lXext -lX11 -lXcursor -lsqlite3 -lpthread -ldl
 debug: $(OBJECTS)
 	mkdir -p bin/
-	cd src/
 	$(COMPILER) -o $(TARGET) $(OBJECTS) $(FLAGS) $(INCLUDE) $(LIBDIRS) $(LIBS)
-	cd ../
 
-src/Application.o: src/Application.cpp src/Application.h src/definitions.h
+windows: TARGET = bin/MDCVis.exe
+windows: FLAGS += -O3
+windows: LIBDIRS = -L./lib/Windows
+windows: LIBS = -lIrrlicht -lopengl32 -lsqlite3 -lpthreadGC2 -ldl -static-libgcc -static-libstdc++
+windows: $(OBJECTS)
+	mkdir -p bin/
+	windres mdcvis.rc -O coff -o mdcvis.res
+	$(COMPILER) -o $(TARGET) $(OBJECTS) mdcvis.res $(FLAGS) $(INCLUDE) $(LIBDIRS) $(LIBS)
+
+debug-windows: TARGET = bin/MDCVis.exe
+debug-windows: FLAGS += -g
+debug-windows: LIBDIRS = -L./lib/Windows
+debug-windows: LIBS = -lIrrlicht -lopengl32 -lsqlite3 -lpthreadGC2 -ldl -static-libgcc -static-libstdc++
+debug-windows: $(OBJECTS)
+	mkdir -p bin/
+	windres mdcvis.rc -O coff -o mdcvis.res
+	$(COMPILER) -o $(TARGET) $(OBJECTS) mdcvis.res $(FLAGS) $(INCLUDE) $(LIBDIRS) $(LIBS)
+
+src/Application.o: src/Application.cpp src/Application.hpp src/definitions.hpp
 	$(COMPILER) -o $@ -c $< $(FLAGS) $(INCLUDE)
 
-src/ExhibitDlg.o: src/ExhibitDlg.cpp src/ExhibitDlg.h src/definitions.h
+src/ExhibitDlg.o: src/ExhibitDlg.cpp src/ExhibitDlg.hpp src/definitions.hpp
 	$(COMPILER) -o $@ -c $< $(FLAGS) $(INCLUDE)
 
-src/ExhibitMdl.o: src/ExhibitMdl.cpp src/ExhibitMdl.h src/definitions.h
+src/ExhibitMdl.o: src/ExhibitMdl.cpp src/ExhibitMdl.hpp src/definitions.hpp
 	$(COMPILER) -o $@ -c $< $(FLAGS) $(INCLUDE)
 
 src/main.o: src/main.cpp
 	$(COMPILER) -o $@ -c $< $(FLAGS) $(INCLUDE)
 
-src/Scene.o: src/Scene.cpp src/Scene.h src/definitions.h
+src/Scene.o: src/Scene.cpp src/Scene.hpp src/definitions.hpp
 	$(COMPILER) -o $@ -c $< $(FLAGS) $(INCLUDE)
 
-src/SettingsCtrl.o: src/SettingsCtrl.cpp src/SettingsCtrl.h src/definitions.h
+src/SettingsCtrl.o: src/SettingsCtrl.cpp src/SettingsCtrl.hpp src/definitions.hpp
 	$(COMPILER) -o $@ -c $< $(FLAGS) $(INCLUDE)
 
-src/SettingsDlg.o: src/SettingsDlg.cpp src/SettingsDlg.h src/definitions.h
+src/SettingsDlg.o: src/SettingsDlg.cpp src/SettingsDlg.hpp src/definitions.hpp
 	$(COMPILER) -o $@ -c $< $(FLAGS) $(INCLUDE)
 
-src/SettingsMdl.o: src/SettingsMdl.cpp src/SettingsMdl.h src/definitions.h
+src/SettingsMdl.o: src/SettingsMdl.cpp src/SettingsMdl.hpp src/definitions.hpp
 	$(COMPILER) -o $@ -c $< $(FLAGS) $(INCLUDE)
 
 ifeq ($(shell uname), Linux)
@@ -64,8 +81,11 @@ install:
 	echo "Icon=/opt/mdcvis/mdcicon.png" >> /usr/share/applications/mdc.desktop
 	echo "Categories=Education;Science;" >> /usr/share/applications/mdc.desktop
 	echo >> /usr/share/applications/mdc.desktop
-	chmod a+x /usr/share/applications/mdc.desktop 
+	chmod a+x /usr/share/applications/mdc.desktop
+	
+uninstall:
+	$(RM) -rf /opt/mdcvis /usr/share/applications/mdc.desktop
 endif
 
 clean:
-	$(RM) bin/ src/*.o -r
+	$(RM) bin/ src/*.o -r mdcvis.res

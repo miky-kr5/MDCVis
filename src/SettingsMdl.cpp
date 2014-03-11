@@ -29,7 +29,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
-#include "SettingsMdl.h"
+#include "SettingsMdl.hpp"
 
 using std::ifstream;
 using std::ofstream;
@@ -43,9 +43,9 @@ static const string DEF_SETTINGS = "<?xml version=\"1.0\"?>\n"
                             	   "<mdcvis>\n"
                             	   "  <video>\n"
                             	   "    <setting name=\"driver\"        value=\"OpenGL\">\n"
-                            	   "    <setting name=\"fullscreen\"    value=\"1\">\n"
+                            	   "    <setting name=\"fullscreen\"    value=\"0\">\n"
                             	   "    <setting name=\"antialiasing\"  value=\"2\">\n"
-                            	   "    <setting name=\"vsync\"         value=\"1\">\n"
+                            	   "    <setting name=\"vsync\"         value=\"0\">\n"
                             	   "    <setting name=\"resolution\"    value=\"800x600\">\n"
                             	   "  </video>\n"
                             	   "  <controls>\n"
@@ -84,9 +84,32 @@ void mdcSettingsMdl::freeInstance() {
 }
 
 mdcSettingsMdl::mdcSettingsMdl(): refs( 0 ), changed(false) {
+	canUseSettings = false;
+	antialiasing = 0;
+	fullScreen = false;
 	screenDimensions = new core::dimension2d<u32>();
+	screenDimensions->Width = 800;
+	screenDimensions->Height = 600;
+	vSync = false;
+	driver = video::EDT_OPENGL;
+	forward.Action = EKA_MOVE_FORWARD;
+	backward.Action = EKA_MOVE_BACKWARD;
+	s_left.Action = EKA_STRAFE_LEFT;
+	s_right.Action = EKA_STRAFE_RIGHT;
+	setKeyMapKey( 'w', forward );
+	setKeyMapKey( 's', backward );
+	setKeyMapKey( 'a', s_left );
+	setKeyMapKey( 'd', s_right );
 
+#if defined( _WIN32 ) || defined( __MINGW32__ )
+	char * userHome = getenv( "APPDATA" );
+#elif defined( __linux__ )
 	char * userHome = getenv( "HOME" );
+#else
+#error "Not a GNU/Linux or Windows platform."
+#endif
+
+
 	if ( userHome != NULL ) {
 		settingsPath = userHome;
 
@@ -104,7 +127,8 @@ mdcSettingsMdl::mdcSettingsMdl(): refs( 0 ), changed(false) {
 			string command;
 			int success;
 
-			command = "mkdir " + settingsPath;
+			command = "mkdir \"" + settingsPath;
+			command += "\"";
 			success = system( command.c_str() );
 
 			if ( success != 0 ) {
@@ -192,6 +216,14 @@ void mdcSettingsMdl::loadSettingsFile() {
 			screenDimensions->Height = 600;
 			vSync = false;
 			driver = video::EDT_OPENGL;
+			forward.Action = EKA_MOVE_FORWARD;
+			backward.Action = EKA_MOVE_BACKWARD;
+			s_left.Action = EKA_STRAFE_LEFT;
+			s_right.Action = EKA_STRAFE_RIGHT;
+			setKeyMapKey( 'w', forward );
+			setKeyMapKey( 's', backward );
+			setKeyMapKey( 'a', s_left );
+			setKeyMapKey( 'd', s_right );
 
 			return;
 		}
@@ -208,6 +240,14 @@ void mdcSettingsMdl::loadSettingsFile() {
 			screenDimensions->Height = 600;
 			vSync = false;
 			driver = video::EDT_OPENGL;
+			forward.Action = EKA_MOVE_FORWARD;
+			backward.Action = EKA_MOVE_BACKWARD;
+			s_left.Action = EKA_STRAFE_LEFT;
+			s_right.Action = EKA_STRAFE_RIGHT;
+			setKeyMapKey( 'w', forward );
+			setKeyMapKey( 's', backward );
+			setKeyMapKey( 'a', s_left );
+			setKeyMapKey( 'd', s_right );
 
 			return;
 		}

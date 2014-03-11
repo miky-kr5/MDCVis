@@ -51,7 +51,7 @@ La aplicación está inspirada en el trabajo de George Lepouras y Costas Vassila
 publicado en 2004 y titulado "Virtual museums for all: employing game technology for
 edutainment" (*Museos virtuales para todos: Empleando tecnología de juegos para el* eduentretenimiento).
 
-### Licence and copyright ###
+### Licencia y copyright ###
 
 MDCVis es software libre y puede ser utilizado y distribuido bajo los términos de la Licencia Pública General GNU version 3 o, a su opción, cualquier versión posterior. Vea el archivo LICENSE para más detalles.
 

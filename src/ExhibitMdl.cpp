@@ -26,7 +26,7 @@
 
 #include <sqlite/sqlite3.h>
 
-#include "ExhibitMdl.h"
+#include "ExhibitMdl.hpp"
 
 using std::cout;
 using std::cerr;

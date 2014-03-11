@@ -22,7 +22,7 @@
 
 #include <cassert>
 
-#include "Scene.h"
+#include "Scene.hpp"
 
 #define FAR_UNITS             50000.0f
 #define CAMERA_ROTATE_SPEED   100.0f
@@ -147,11 +147,14 @@ mdcScene::mdcScene( IrrlichtDevice * device ) {
 							node->setMaterialFlag( video::EMF_NORMALIZE_NORMALS, true );
 
 							// If the model uses a texture with alpha channel the load it
-							if ( alpha )
+							if ( alpha ){
 								node->setMaterialType( video::EMT_TRANSPARENT_ALPHA_CHANNEL );
-							else
+								node->setMaterialFlag( video::EMF_BACK_FACE_CULLING, false );
+							}else{
 								// Else ignore the alpha channel.
 								node->setMaterialType( video::EMT_SOLID );
+								node->setMaterialFlag( video::EMF_BACK_FACE_CULLING, true );
+							}
 
 							// Just set the visibility.
 							if ( !visible )

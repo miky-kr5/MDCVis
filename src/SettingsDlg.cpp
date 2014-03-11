@@ -22,7 +22,7 @@
 
 #include <cassert>
 
-#include "SettingsDlg.h"
+#include "SettingsDlg.hpp"
 
 using core::stringw;
 

@@ -22,8 +22,8 @@
 
 #include <cstdlib>
 
-#include "SettingsMdl.h"
-#include "ExhibitDlg.h"
+#include "SettingsMdl.hpp"
+#include "ExhibitDlg.hpp"
 
 #define WIN_W 600
 #define WIN_H 400
