@@ -1,5 +1,4 @@
 # Directories
-bin/
 media/
 obj/
 lib/
@@ -24,3 +23,4 @@ lib/
 *.layout
 *.cbTemp
 *~
+*.res

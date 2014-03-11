@@ -1,43 +1,37 @@
+LINTARGET = bin/mdcvis
+WINTARGET = bin/MDCVis.exe
 COMPILER = g++
 FLAGS = -Wall
 INCLUDE = -I./include
 OBJECTS = src/Application.o src/ExhibitDlg.o src/ExhibitMdl.o src/main.o src/Scene.o src/SettingsCtrl.o src/SettingsDlg.o src/SettingsMdl.o
 
-all: TARGET = bin/MDCVis
 all: FLAGS += -O3
 all: INCLUDE += -I/usr/X11R6/include
 all: LIBDIRS = -L/usr/x11R6/lib -L./lib/Linux 
 all: LIBS = -lIrrlicht -lGL -lXxf86vm -lXext -lX11 -lXcursor -lsqlite3 -lpthread -ldl
 all: $(OBJECTS)
-	mkdir -p bin/
-	$(COMPILER) -o $(TARGET) $(OBJECTS) $(FLAGS) $(INCLUDE) $(LIBDIRS) $(LIBS)
+	$(COMPILER) -o $(LINTARGET) $(OBJECTS) $(FLAGS) $(INCLUDE) $(LIBDIRS) $(LIBS)
 
-debug: TARGET = bin/MDCVis
 debug: FLAGS += -g
 debug: INCLUDE += -I/usr/X11R6/include
 debug: LIBDIRS = -L/usr/x11R6/lib -L./lib/Linux
 debug: LIBS = -lIrrlicht -lGL -lXxf86vm -lXext -lX11 -lXcursor -lsqlite3 -lpthread -ldl
 debug: $(OBJECTS)
-	mkdir -p bin/
-	$(COMPILER) -o $(TARGET) $(OBJECTS) $(FLAGS) $(INCLUDE) $(LIBDIRS) $(LIBS)
+	$(COMPILER) -o $(LINTARGET) $(OBJECTS) $(FLAGS) $(INCLUDE) $(LIBDIRS) $(LIBS)
 
-windows: TARGET = bin/MDCVis.exe
 windows: FLAGS += -O3
 windows: LIBDIRS = -L./lib/Windows
 windows: LIBS = -lIrrlicht -lopengl32 -lsqlite3 -lpthreadGC2 -ldl -static-libgcc -static-libstdc++
 windows: $(OBJECTS)
-	mkdir -p bin/
 	windres mdcvis.rc -O coff -o mdcvis.res
-	$(COMPILER) -o $(TARGET) $(OBJECTS) mdcvis.res $(FLAGS) $(INCLUDE) $(LIBDIRS) $(LIBS)
+	$(COMPILER) -o $(WINTARGET) $(OBJECTS) mdcvis.res $(FLAGS) $(INCLUDE) $(LIBDIRS) $(LIBS)
 
-debug-windows: TARGET = bin/MDCVis.exe
 debug-windows: FLAGS += -g
 debug-windows: LIBDIRS = -L./lib/Windows
 debug-windows: LIBS = -lIrrlicht -lopengl32 -lsqlite3 -lpthreadGC2 -ldl -static-libgcc -static-libstdc++
 debug-windows: $(OBJECTS)
-	mkdir -p bin/
 	windres mdcvis.rc -O coff -o mdcvis.res
-	$(COMPILER) -o $(TARGET) $(OBJECTS) mdcvis.res $(FLAGS) $(INCLUDE) $(LIBDIRS) $(LIBS)
+	$(COMPILER) -o $(WINTARGET) $(OBJECTS) mdcvis.res $(FLAGS) $(INCLUDE) $(LIBDIRS) $(LIBS)
 
 src/Application.o: src/Application.cpp src/Application.hpp src/definitions.hpp
 	$(COMPILER) -o $@ -c $< $(FLAGS) $(INCLUDE)
@@ -88,4 +82,4 @@ uninstall:
 endif
 
 clean:
-	$(RM) bin/ src/*.o -r mdcvis.res
+	$(RM) $(LINTARGET) $(WINTARGET) src/*.o mdcvis.res -r

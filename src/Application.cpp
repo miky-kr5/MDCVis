@@ -213,6 +213,7 @@ void mdcApplication::run(){
 			driver->endScene();
 			loadScene();
 			loadingScreen->remove();
+			camera = scene->getCamera();
 		}
 
 		while( device->run() ) {
