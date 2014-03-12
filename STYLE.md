@@ -5,7 +5,7 @@ This document details the coding style to be used throughout the entire MDCVis p
 
 GENERAL
 -------
-Use real tabs that equal 4 spaces.  
+Use real tabs that equal 4 spaces.
 
 Use typically trailing braces everywhere (if, else, functions, structures, typedefs, class definitions, etc.)
 
@@ -116,7 +116,7 @@ Every file must include the follwing header text at the beggining:
     ; Author:        <name of author>, <email>@<some server>
     ; Date created:  <date the file was created in mm/dd/yyyy format>
     ;
-    ; Copyright (C) <Year of file creation> Fundacion Museos Nacionales
+    ; Copyright (C) <Year of file creation> Museo de Ciencias de Caracas
     ;
     ; This program is free software: you can redistribute it and/or modify
     ; it under the terms of the GNU General Public License as published by
