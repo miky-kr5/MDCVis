@@ -4,7 +4,7 @@
 ; Author:        Miguel Angel Astor, sonofgrendel@gmail.com
 ; Date created:  2/19/2014
 ;
-; Copyright (C) 2014 Fundacion Museos Nacionales
+; Copyright (C) 2014 Museo de Ciencias de Caracas
 ;
 ; This program is free software: you can redistribute it and/or modify
 ; it under the terms of the GNU General Public License as published by

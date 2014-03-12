@@ -1,0 +1,13 @@
+
+[Desktop Entry]
+Type=Application
+Comment=Una aplicación para visitar el Museo de Ciencias de Caracas
+Version=1.1-1
+Name=Museo de Ciencias
+Exec=/opt/mdcvis/mdcvis %U
+Path=/opt/mdcvis
+StartupNotify=true
+Terminal=false
+Icon=/opt/mdcvis/mdcicon.png
+Categories=Education;Science;
+
