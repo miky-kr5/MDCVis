@@ -22,7 +22,7 @@ MDCVis also makes use of many third party libraries. See the CREDITS.md file for
 
 ### How to compile and install ###
 
-On Debian based GNU/Linux system just execute:
+On Debian based GNU/Linux systems just execute:
 
     make
     sudo make install
@@ -30,6 +30,18 @@ On Debian based GNU/Linux system just execute:
 Then you can execute the program with the link that will appear on the Education or Science menus of your sistem. This procedure has been tested to work on Ubuntu 12.04 and Canaima GNU/Linux 4.0~estable. Note, if the link does not appear on your menu 
 close your session and login again.
 
+To make a distributable deb package execute:
+
+    make
+    sudo make deb
+
+To compile for Windows execute the following on a MinGW32 command promt (MinGW32 and NSIS must be installed and on the path for this to work):
+
+	make windows
+	make setup
+
+Execute the generated setup file to install the MDCVis distribution.
+	
 ### Controls ###
 
 By default MDCVis uses the WASD keys to move the camera and the mouse to look. Clicking 
@@ -67,6 +79,19 @@ En sistemas GNU/Linux basados en Debian solo ejecute:
 
 Luego puede ejecutar el programa con el enlace que aparecerá en los menús Educación o Ciencia de su sistema. Este procedimiento ha sido probado en Ubuntu 12.04 y Canaima GNU/Linux 4.0~estable. Nota, si el enlace del menú no aparece de inmediato cierre su
 sesión y vuelva a iniciarla.
+
+Para generar un paquete deb redistribuible ejecute:
+
+    make
+    sudo make deb
+
+Para compilar en Windows ejecute lo siguiente en un símbolo del sistema de MinGW32 (MinGW32 y NSIS deben estar instalados y registrados en el *path*
+para que esto funcione):
+
+	make windows
+	make setup
+
+Ejecute el *setup* generado para instalar la distribución de MDCVis.
 
 ### Controles ###
 
