@@ -17,6 +17,10 @@ lib/
 *.la
 *.a
 
+#setups
+*.deb
+*.exe
+
 # Others
 *.d
 *.depend
