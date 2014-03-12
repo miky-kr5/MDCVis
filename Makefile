@@ -3,7 +3,7 @@ LINTARGET = bin/mdcvis
 WINTARGET = bin/MDCVis.exe
 APPDATA = data/exhibits data/font data/gfx data/mdc.zip data/mdcicon.png LICENSE CREDITS.md README.md
 LINSETUP = mdcvis.deb
-WINSETUP = TODO
+WINSETUP = MDCVis_setup.exe
 COMPILER = g++
 FLAGS = -Wall
 INCLUDE = -I./include
@@ -64,8 +64,17 @@ src/SettingsDlg.o: src/SettingsDlg.cpp src/SettingsDlg.hpp src/definitions.hpp
 src/SettingsMdl.o: src/SettingsMdl.cpp src/SettingsMdl.hpp src/definitions.hpp
 	$(COMPILER) -o $@ -c $< $(FLAGS) $(INCLUDE)
 
+setup: $(WINSETUP)
+
+$(WINSETUP): $(WINTARGET)
+	makensis MDCVis.nsi
+
 ifeq ($(shell uname), Linux)
 deb: $(LINSETUP)
+	md MDCVis
+	md MDCVis exhibits
+	copy $(TARGET) data\mdc.zip lib\Windows\Irrlicht.dll MDCVis
+	
 
 $(LINSETUP): $(LINTARGET)
 	mkdir -p mdcvis_$(VERSION)/opt/mdcvis
@@ -109,4 +118,4 @@ uninstall:
 endif
 
 clean:
-	$(RM) $(LINTARGET) $(WINTARGET) src/*.o mdcvis.res -r
+	$(RM) $(LINTARGET) $(WINTARGET) $(OBJECTS) mdcvis.res $(LINSETUP) $(WINSETUP) -r
