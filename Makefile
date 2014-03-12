@@ -10,7 +10,7 @@ all: INCLUDE += -I/usr/X11R6/include
 all: LIBDIRS = -L/usr/x11R6/lib -L./lib/Linux 
 all: LIBS = -lIrrlicht -lGL -lXxf86vm -lXext -lX11 -lXcursor -lsqlite3 -lpthread -ldl
 all: $(LINTARGET)
-	
+
 debug: FLAGS += -g
 debug: INCLUDE += -I/usr/X11R6/include
 debug: LIBDIRS = -L/usr/x11R6/lib -L./lib/Linux
@@ -79,7 +79,7 @@ install:
 	echo "Categories=Education;Science;" >> /usr/share/applications/mdc.desktop
 	echo >> /usr/share/applications/mdc.desktop
 	chmod a+x /usr/share/applications/mdc.desktop
-	
+
 uninstall:
 	$(RM) -rf /opt/mdcvis /usr/share/applications/mdc.desktop
 endif

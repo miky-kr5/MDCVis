@@ -443,10 +443,7 @@ void mdcSettingsMdl::saveSettings() const {
 }
 
 bool mdcSettingsMdl::settingsDirExists() const {
-#include <windows.h>
-#include <string>
-
-#if defined( _WIN32 ) || defined( __MINGW32__ ) 
+#if defined( _WIN32 ) || defined( __MINGW32__ )
 	DWORD ftyp = GetFileAttributesA( settingsPath.c_str() );
 
 	if ( ftyp == INVALID_FILE_ATTRIBUTES )
