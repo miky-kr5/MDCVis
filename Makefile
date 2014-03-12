@@ -71,10 +71,6 @@ $(WINSETUP): $(WINTARGET)
 
 ifeq ($(shell uname), Linux)
 deb: $(LINSETUP)
-	md MDCVis
-	md MDCVis exhibits
-	copy $(TARGET) data\mdc.zip lib\Windows\Irrlicht.dll MDCVis
-	
 
 $(LINSETUP): $(LINTARGET)
 	mkdir -p mdcvis_$(VERSION)/opt/mdcvis
@@ -88,7 +84,7 @@ $(LINSETUP): $(LINTARGET)
 	echo "Priority: optional" >> mdcvis_$(VERSION)/DEBIAN/control
 	echo "Architecture: i386" >> mdcvis_$(VERSION)/DEBIAN/control
 	echo "Installed-Size: 22833" >> mdcvis_$(VERSION)/DEBIAN/control
-	echo "Depends: libc6 (>= 2.15), libstdc++6 (>= 4.6.3), libxxf86vm1 (>= 1.1.1)" >> mdcvis_$(VERSION)/DEBIAN/control
+	echo "Depends: libc6 (>= 2.13), libstdc++6 (>= 4.6.3), libxxf86vm1 (>= 1.1.1)" >> mdcvis_$(VERSION)/DEBIAN/control
 	echo "Maintainer: Miguel Angel Astor Romero <sonofgrendel@gmail.com>" >> mdcvis_$(VERSION)/DEBIAN/control
 	echo "Description: Visitas virtuales en el Museo de Ciencias de Caracas" >> mdcvis_$(VERSION)/DEBIAN/control
 	echo " Esta aplicación permite realizar visitas dentro de una representación">> mdcvis_$(VERSION)/DEBIAN/control
